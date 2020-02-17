@@ -5,6 +5,40 @@
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(fileloc) import the file at the location given by the fileloc string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
  3. [subsetStruct] = **surfacePlotter**(start_day,start_hour,end_day,end_hour,primaryStruct) plots the data in the structure created in step 2. This always plots a figure with timeseries for sea-level pressure, wind, temperature, dewpoint, and relative humidity with respect to water. If precipitation or fog occurs, it will also plot an abacus plot of precipitation type based on the present weather code.
  
+ # Finding ASOS Stations
+ There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Additionally, some common ASOS stations used by our group are listed below.
+ ### List of Common ASOS Stations
+ ----
+ #### Long Island
+KISP: Islip, closest to Stony Brook University  
+KHWV: Brookhaven  
+KFRG: Farmingdale  
+KFOK: Westhampton  
+KFJK: JFK airport  
+KLGA: La Guardia  
+#### Northeast US
+Connecticut: KHVN KBDR KGON  
+New Jersey: KVAY KTTN KCDW KSMQ KACY  
+New York: KHPN KFWN KPOU KMGJ  
+Rhode Island: KWST  
+#### Selected co-located ASOS and radiosonde launch sites
+KGSO/GSO: Greensboro, NC  
+KFFC/FFC: Peachtree City, GA  
+KALB/ALB: Albany, NY  
+KDET/DTX: Detroit/White Lake, MI  
+KCAR/CAR: Caribou, ME  
+KHQM/UIL: Quillayute, WA  
+KBIS/BIS: Bismarck, ND  
+#### Front Range
+KAPA: Denver - Centennial, CO  
+KDEN: Denver, CO  
+KCYS: Cheyenne, WY  
+KLAR: Laramie, WY
+#### Utah
+KLGU: Logan  
+KOGD: Ogden  
+KSLC: Salt Lake City, closest to Alta  
+ 
  # ASOS Documentation
  Unfortunately, ASOS documentation is scattered around several places and there is no one true "master" document.  
  [**ASOS User's Guide**](https://www.weather.gov/media/asos/aum-toc.pdf) is the NWS user's guide to understanding the sensors and algorithms behind the ASOS data. However, it does not fully explain the present weather codes.  
