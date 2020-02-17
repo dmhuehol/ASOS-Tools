@@ -17,12 +17,14 @@ KFOK: Westhampton
 KFJK: JFK airport  
 KLGA: La Guardia  
 KEWR: Newark  
-KTEB: Teterboro  
+KTEB: Teterboro 
+![Long Island area ASOS stations](images/long_island_area_ASOS.jpg)
 #### Northeast US
 Connecticut: KHVN KBDR KGON  
 New Jersey: KVAY KTTN KCDW KSMQ KACY  
 New York: KHPN KFWN KPOU KMGJ  
 Rhode Island: KWST  
+![Northeast US area ASOS stations](images/northeast_area_ASOS.jpg)
 #### Selected co-located ASOS and radiosonde launch sites
 KGSO/GSO: Greensboro, NC  
 KFFC/FFC: Peachtree City, GA  
