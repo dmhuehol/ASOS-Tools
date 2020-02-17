@@ -35,7 +35,7 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 7/6/2018
+    %Version date: 2/17/2020
     %Last major revision: 11/13/2017
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
@@ -360,7 +360,14 @@ else
  %   plot([datenum(2015,2,9,12,00,00) datenum(2015,2,9,12,00,00)],[0 4],'Color','r','LineWidth',2) %Use this line to annotate a particular time with a vertical red line (such as a sounding time)
     ylim([0 yplacer+1]); %For easier comprehension, y limits are set +/- 1 larger than number of wires
     set(presentAxis,'YTick',1:yplacer); %Only make as many wires as there were precipitation types
-    set(presentAxis,'YTickLabel',presentLabels); %Label the wires
+    try
+        set(presentAxis,'YTickLabel',presentLabels); %Label the wires
+    catch
+        disp('No precipitation weather codes reported!')
+        % e.g. for SQ
+        close
+        return
+    end
     set(presentAxis,'FontName','Lato Bold'); set(presentAxis,'FontSize',20)
     xlabel('Time (hour)')
   
