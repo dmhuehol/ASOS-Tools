@@ -9,13 +9,15 @@
  There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Additionally, some common ASOS stations used by our group are listed below.
  ### List of Common ASOS Stations
  ----
- #### Long Island
+ #### Long Island area
 KISP: Islip, closest to Stony Brook University  
 KHWV: Brookhaven  
 KFRG: Farmingdale  
 KFOK: Westhampton  
 KFJK: JFK airport  
 KLGA: La Guardia  
+KEWR: Newark  
+KTEB: Teterboro  
 #### Northeast US
 Connecticut: KHVN KBDR KGON  
 New Jersey: KVAY KTTN KCDW KSMQ KACY  
