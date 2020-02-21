@@ -64,11 +64,17 @@ if isempty(dayIndices)==1 %If day is not found
 end
 
 extractHours = [ASOS(dayIndices).Hour]; %Array of all hours from the given days
+extractDays = [ASOS(dayIndices).Day]; %Array of all days corresponding to given hours
 logicalHours = logical(extractHours==hStart); %Since it's possible for end to be a number smaller than start and hence deceive the function, start by finding only the start hour
 hStartIndices = find(logicalHours~=0); %These are the indices of the input starting hour
 if isempty(hStartIndices)==1 %If start hour is not found
     startHourMsg = 'Failed to find start hour in structure!';
     error(startHourMsg);
+end
+testDayStart = extractDays(hStartIndices);
+if ~isequal(dStart,testDayStart(1))
+    msg = 'Data for requested start hour is missing!';
+    error(msg);
 end
 
 hStartFirstInd = hStartIndices(1); %This is the first index
@@ -80,6 +86,11 @@ end
 hEndIndices = find(logicalHours~=0); %These are the indices of the ending hour
 if isempty(hEndIndices)==1 %Check to see whether the ending indices were found
     msg = 'Could not find end hour in structure!'; %If not
+    error(msg);
+end
+testDayEnd = extractDays(hEndIndices);
+if ~isequal(dEnd,testDayEnd(end))
+    msg = 'Data for requested end hour is missing!';
     error(msg);
 end
 hEndFinalInd = hEndIndices(end); %This is the last data index
