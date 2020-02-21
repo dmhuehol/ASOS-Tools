@@ -96,7 +96,6 @@ humidity = [surfaceSubset.RelativeHumidity]; %Humidity
 pressureInHg = [surfaceSubset.Altimeter]; %Pressure
 pressure = pressureInHg.*33.8639; %Convert pressure from the default inches of mercury to the more useful hPa
 
-TdT = [dewpoint;temperature]; %Concatenate dewpoint and temperature for plotting on same axis
 times = [surfaceSubset.Year; surfaceSubset.Month; surfaceSubset.Day; surfaceSubset.Hour; surfaceSubset.Minute; zeros(1,length(surfaceSubset))]; %YMDHM are real from data, S are generated at 0
 serialTimes = datenum(times(1,:),times(2,:),times(3,:),times(4,:),times(5,:),times(6,:)); %Make times into datenumbers
 %Note: use actual datetimes once we update to 2016+
@@ -112,8 +111,13 @@ labelTxt = 16;
 axTxt = 16;
 
 figure; %Make new figure
-tempAndDew = plot(serialTimes,TdT); %Plot temperature and dewpoint in deg C
-set(tempAndDew,'LineWidth',2.3)
+tempPlot = plot(serialTimes,temperature); %Plot temperature and dewpoint in deg C
+tempPlot.Color = [0 0 255]./255;
+tempPlot.LineWidth = 2.3;
+hold on
+dewPlot = plot(serialTimes,dewpoint);
+dewPlot.Color = [0 255 0]./255;
+dewPlot.LineWidth = 2.3;
 ylim([minDegC-4 maxDegC+1]) %Set ylim according to max/min degree; the min limit is offset by -3 instead of -1 in order to make room for the wind barbs
 celsiusLabelHand = ylabel([char(176) 'C']);
 set(celsiusLabelHand,'FontName',font); set(celsiusLabelHand,'FontSize',labelTxt);
