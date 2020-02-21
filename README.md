@@ -12,7 +12,7 @@ The second type of figure is an abacus plot that displays precipitation type, as
 ![Example abacus plot](images/ex_abacus_raleigh_20181209.png)
 
 ### Code to replicate example images
-1. [downloadedFilenames] = **ASOSdownloadFiveMin**(youremail (at) example.edu,2018,12,path)
+1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,2018,12,path)
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
 3. [winterStormEx] = **surfacePlotter**(9,9,9,21,krdu_1218)
  
