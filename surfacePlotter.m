@@ -60,7 +60,7 @@ end
 dayIndices = find(logicalDays~=0); %These are the indices of the input day(s)
 if isempty(dayIndices)==1 %If day is not found
     dayMsg = 'No data from input day(s) present in structure!';
-    error(dayMsg); %Give a useful error message
+    error(dayMsg);
 end
 
 extractHours = [ASOS(dayIndices).Hour]; %Array of all hours from the given days
@@ -68,7 +68,7 @@ logicalHours = logical(extractHours==hStart); %Since it's possible for end to be
 hStartIndices = find(logicalHours~=0); %These are the indices of the input starting hour
 if isempty(hStartIndices)==1 %If start hour is not found
     startHourMsg = 'Failed to find start hour in structure!';
-    error(startHourMsg); %Give a useful error message
+    error(startHourMsg);
 end
 
 hStartFirstInd = hStartIndices(1); %This is the first index
@@ -80,7 +80,7 @@ end
 hEndIndices = find(logicalHours~=0); %These are the indices of the ending hour
 if isempty(hEndIndices)==1 %Check to see whether the ending indices were found
     msg = 'Could not find end hour in structure!'; %If not
-    error(msg); %give a useful error message
+    error(msg);
 end
 hEndFinalInd = hEndIndices(end); %This is the last data index
 
@@ -109,13 +109,17 @@ font = 'Lato Bold';
 labelTxt = 16;
 axTxt = 16;
 
-figure; %Make new figure
+figure;
+%Line colors are from the Okabe-Ito palette
+%Okabe, M., and K. Ito. 2008. ?Color Universal Design (CUD): How to Make
+%Figures and Presentations That Are Friendly to Colorblind People.?
+%http://jfly.iam.u-tokyo.ac.jp/color/.
 tempPlot = plot(serialTimes,temperature); %Plot temperature and dewpoint in deg C
-tempPlot.Color = [0 0 255]./255;
+tempPlot.Color = [86 180 233]./255; %sky blue
 tempPlot.LineWidth = 2.3;
 hold on
 dewPlot = plot(serialTimes,dewpoint);
-dewPlot.Color = [0 255 0]./255;
+dewPlot.Color = [0 158 115]./255; %bluish green
 dewPlot.LineWidth = 2.3;
 ylim([minDegC-4 maxDegC+1]) %Set ylim according to max/min degree; the min limit is offset by -3 instead of -1 in order to make room for the wind barbs
 celsiusLabelHand = ylabel([char(176) 'C']);
@@ -123,10 +127,10 @@ set(celsiusLabelHand,'FontName',font); set(celsiusLabelHand,'FontSize',labelTxt)
 degCaxis = gca; %Grab axis in order to change color
 set(degCaxis,'YColor',[0 112 115]./255); %Teal - note that this is the same axis for temperature (blue) and dewpoint (green)
 set(degCaxis,'FontName',font); set(degCaxis,'FontSize',axTxt);
-addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[255 170 0]./255,'LineWidth',2.3); %Plot pressure in hPa
+addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[230 159 0]./255,'LineWidth',2.3); %Plot pressure in hPa
 pressureLabelHand = addaxislabel(2,'hPa');
 set(pressureLabelHand,'FontName',font); set(pressureLabelHand,'FontSize',labelTxt);
-addaxis(serialTimes,humidity,[minHum-10 maxHum],'m','LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
+addaxis(serialTimes,humidity,[minHum-10 maxHum],'Color',[204 121 167]./255,'LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
 humidityLabelHand = addaxislabel(3,'%');
 set(humidityLabelHand,'FontName',font); set(humidityLabelHand,'FontSize',labelTxt);
 legendHand = legend('Dewpoint','Temperature','Pressure','Humidity','AutoUpdate','off');
@@ -158,7 +162,8 @@ end
 tlabel('x','HH:MM','FixLow',10,'FixHigh',12) %x-axis is date axis; FixLow and FixHigh arguments control the number of ticks that are displayed
 xlim([serialTimes(1)-0.02 serialTimes(end)+0.02]); %For the #aesthetic
 
-titleString = 'Surface observations data for ';
+titleString = ['Surface observations data for ' ASOS(1).StationID];
+
 toString = 'to';
 spaceString = {' '}; %The curly brackets are necessary
 windString = 'Upper barbs denote winds; lower barbs denote wind character';
@@ -365,7 +370,7 @@ else
     xlabel('Time (hour)')
   
     %Make adaptive title including start and end times
-    weatherCodeTitleString = 'Precip type data for ';
+    weatherCodeTitleString = ['Precip type data for ' ASOS(1).StationID];
     if dStart==dEnd
         obsDate = datestr(serialTimes(1),'mm/dd/yy');
         titleMsg = [weatherCodeTitleString datestr(obsDate)]; %Builds title message "Precip type data for mm/dd/yy"
