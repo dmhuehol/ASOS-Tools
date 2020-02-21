@@ -35,8 +35,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 2/17/2020
-    %Last major revision: 11/13/2017
+    %Version date: 2/21/2020
+    %Last major revision: 2/21/2020
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
         %found on the MATLAB File Exchange
@@ -98,12 +98,11 @@ pressure = pressureInHg.*33.8639; %Convert pressure from the default inches of m
 
 times = [surfaceSubset.Year; surfaceSubset.Month; surfaceSubset.Day; surfaceSubset.Hour; surfaceSubset.Minute; zeros(1,length(surfaceSubset))]; %YMDHM are real from data, S are generated at 0
 serialTimes = datenum(times(1,:),times(2,:),times(3,:),times(4,:),times(5,:),times(6,:)); %Make times into datenumbers
-%Note: use actual datetimes once we update to 2016+
 
 minDegC = nanmin(dewpoint); %Minimum Td will be min for both T and Td, since Td is always less than T
 maxDegC = nanmax(temperature); %Maximum T will be max for both T and Td, since T is always greater than Td
 minHum = nanmin(humidity);
-maxHum = 100.02; %Maximum humidity will always be at least close to 100, so set to just above 100 to make figures consistent while not cutting off 100 values when saving
+maxHum = 100.02; %Maximum humidity will usually be close to 100 in a winter storm, so set to just above 100 to make figures consistent while not cutting off 100 values when saving
 minPre = nanmin(pressure);
 maxPre = nanmax(pressure);
 font = 'Lato Bold';
@@ -140,8 +139,7 @@ set(allAxes(3),'FontName',font); set(allAxes(3),'FontSize',axTxt);
 %Note this is on the same plot as above data
 windSpd = [surfaceSubset.WindSpeed]; %Wind speed data
 windDir = [surfaceSubset.WindDirection]; %Wind direction data
-windCharSpd = [surfaceSubset.WindCharacterSpeed]; %Wind character speed data - currently wind character is not displayed,
-    %which is sort of acceptable in the short term because essentially all wind characters at Upton are gusts
+windCharSpd = [surfaceSubset.WindCharacterSpeed]; %Wind character speed data - currently wind character string (i.e. gust, squall) is not displayed
 barbScale = 0.028; %Modifies the size of the wind barbs for both wind character and regular wind barbs
 
 if length(serialTimes)>100 %When plotting over a long period of time, displaying all wind barbs takes very long and makes the figure confusing
@@ -151,7 +149,7 @@ else
 end
 for windCount = length(serialTimes):spacer:1 %Loop backwards through winds
     windbarb(serialTimes(windCount),minDegC-2.5,windSpd(windCount),windDir(windCount),barbScale,0.09,'r',1); %#justiceforbarb
-    if isnan(windCharSpd(windCount))~=1 %If there is a wind character entry
+    if isnan(windCharSpd(windCount))~=1 %#ok (code analyzer is wrong) %If there is a wind character entry
         windbarb(serialTimes(windCount),minDegC-3.5,windCharSpd(windCount),windDir(windCount),barbScale,0.09,[179 77 77]./255,1); %Make wind barb for the character as well
     end
     hold on %Otherwise only one barb will be plotted
@@ -162,7 +160,7 @@ xlim([serialTimes(1)-0.02 serialTimes(end)+0.02]); %For the #aesthetic
 
 titleString = 'Surface observations data for ';
 toString = 'to';
-spaceString = {' '}; %Yes those curly brackets are needed
+spaceString = {' '}; %The curly brackets are necessary
 windString = 'Upper barbs denote winds; lower barbs denote wind character';
 if dStart==dEnd
     obsDate = datestr(serialTimes(1),'mm/dd/yy');
@@ -191,19 +189,10 @@ else
     %mist, rain, freezing drizzle, drizzle, freezing rain, sleet, graupel,
     %snow, unknown precipitation, hail, ice crystals, thunder
     %
-    %KNOWN PROBLEM: ASOS sometimes misrepresents precipitation type.
+    %NOTE ABOUT DATA QUALITY: ASOS sometimes misrepresents precipitation type.
     %Especially troublesome types are graupel (which is usually displayed
     %as snow), partially melted particles (which displays as rain), and
-    %slush (which displays as rain). Someday the codes might be able to be 
-    %cross-checked against other environmental variables or a database of 
-    %flake pictures but currently the user must simply remain aware of this
-    %issue.
-    %NOTE: it may seem that partially melted particles and slush are
-    %misidentified as freezing rain, but ASOS is likely more or less correct here, as
-    %these particles behave as freezing rain (freezing on contact with the
-    %surface). Technically, they aren't rain per se (rather freezing slush
-    %or freezing partially melted particles) but these precipitation
-    %categories do not exist.
+    %slush (which displays as rain). 
     
     %Initialize variables to check for precipitation type presence
     fogchk = 0; frzfogchk = 0; mistchk = 0; rainchk = 0; frzdrizchk = 0; drizchk = 0; frzrainchk = 0;
@@ -368,7 +357,7 @@ else
         set(presentAxis,'YTickLabel',presentLabels); %Label the wires
     catch
         disp('No precipitation weather codes reported!')
-        % e.g. for SQ
+        % Non-precip weather codes include SQ (squall)
         close
         return
     end
