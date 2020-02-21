@@ -16,7 +16,7 @@
     %the working directory.
     %
     %Outputs:
-    %output_filenames: Array of filenames created by the new files.
+    %downloadedFilenames: Array of filenames created by the new files.
     %
     %Note: if function is failing for no apparent cause, it is likely an NCDC server problem.
     %Wait some time and try again, or try a different email address.
@@ -28,7 +28,7 @@
     %Undergraduate Research Assistant at Environment Analytics
     %
     
-function [output_filenames] = ASOSdownloadFiveMin(emailAddress,station,year,month,downloadedFilePath)
+function [downloadedFilenames] = ASOSdownloadFiveMin(emailAddress,station,year,month,downloadedFilePath)
 if nargin~=5 %Needs all inputs to work properly
     msg = 'Improper number of inputs, check syntax!';
     error(msg);
@@ -106,7 +106,7 @@ for y_c = length(year):-1:1
             disp([obsFilename{y_c,m_c} ' could not be located on server! Skipped and continuing.'])
             continue
         end
-        output_filenames{y_c,m_c} = strcat(downloadedFilePath,obsFilename{y_c,m_c});
+        downloadedFilenames{y_c,m_c} = strcat(downloadedFilePath,obsFilename{y_c,m_c});
     end
 end
 close(ftpNCDC) %Closes FTP connection
