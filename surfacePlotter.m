@@ -223,7 +223,7 @@ else
                 presentLabels{yplacer} = 'Fog';
                 fogchk=1; %Make sure that the above only happens once, otherwise each new fog entry will receive its own label and wire
             end
-            plot(serialTimes(count),fogplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerSize',markerSize); %Gray
+            plot(serialTimes(count),fogplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerFaceColor',[128 128 128]./255,'MarkerSize',markerSize); %Gray
             hold on
         end
         if isempty(regexp(presentWeather{count},'(FZFG){1}','once'))~=1
@@ -233,7 +233,7 @@ else
                 presentLabels{yplacer} = 'Frz Fog';
                 frzfogchk=1;
             end
-            plot(serialTimes(count),frzfogplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerSize',markerSize);
+            plot(serialTimes(count),frzfogplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerFaceColor',[128 128 128]./255,'MarkerSize',markerSize);
             hold on
         end
         if isempty(regexp(presentWeather{count},'(BR){1}','once'))~=1
@@ -243,7 +243,7 @@ else
                 presentLabels{yplacer} = 'Mist';
                 mistchk=1;
             end
-            plot(serialTimes(count),mistplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerSize',markerSize);
+            plot(serialTimes(count),mistplace,'b','Marker','.','MarkerEdgeColor',[128 128 128]./255,'MarkerFaceColor',[128 128 128]./255,'MarkerSize',markerSize);
             hold on
         end
         if isempty(regexp(presentWeather{count},'(DZ){1}','once'))~=1 && isempty(regexp(presentWeather{count},'(FZDZ){1}','once'))==1
@@ -273,7 +273,7 @@ else
                 presentLabels{yplacer} = 'Rain';
                 rainchk=1;
             end
-            plot(serialTimes(count),rainplace,'Marker','.','MarkerFaceColor','b','MarkerSize',markerSize); %Blue
+            plot(serialTimes(count),rainplace,'Marker','.','MarkerFaceColor','b','MarkerEdgeColor','b','MarkerSize',markerSize); %Blue
             hold on
         end
         if isempty(regexp(presentWeather{count},'(FZRA){1}','once'))~=1
@@ -283,7 +283,7 @@ else
                 presentLabels{yplacer} = 'Frz Rain';
                 frzrainchk=1;
             end
-            plot(serialTimes(count),fzraplace,'Marker','.','MarkerFaceColor','b','MarkerSize',markerSize+5);
+            plot(serialTimes(count),fzraplace,'Marker','.','MarkerFaceColor','b','MarkerEdgeColor','b','MarkerSize',markerSize+5);
             hold on
         end
         if isempty(regexp(presentWeather{count},'(PL){1}','once'))~=1 || isempty(regexp(presentWeather{count},'(PE){1}','once'))~=1
@@ -303,7 +303,7 @@ else
                 presentLabels{yplacer} = 'Graupel';
                 graupchk=1;
             end
-            plot(serialTimes(count),graupplace,'Marker','*','MarkerEdgeColor','g','MarkerSize',markerSize-6); %Green
+            plot(serialTimes(count),graupplace,'Marker','*','MarkerEdgeColor','g','MarkerFaceColor','g','MarkerSize',markerSize-6); %Green
             hold on
         end
         if isempty(regexp(presentWeather{count},'(SN){1}','once'))~=1
@@ -313,7 +313,7 @@ else
                 presentLabels{yplacer} = 'Snow';
                 snowchk=1;
             end
-            plot(serialTimes(count),snowplace,'Marker','*','MarkerEdgeColor',[51,153,255]./255,'MarkerSize',markerSize-6); %Light deep blue
+            plot(serialTimes(count),snowplace,'Marker','*','MarkerEdgeColor',[51,153,255]./255,'MarkerFaceColor',[51,153,255]./255,'MarkerSize',markerSize-6); %Light deep blue
             hold on
         end
         if isempty(regexp(presentWeather{count},'(IC){1}','once'))~=1
@@ -323,7 +323,7 @@ else
                 presentLabels{yplacer} = 'Ice Crystals';
                 icchk=1;
             end
-            plot(serialTimes(count),icplace,'Marker','-','MarkerEdgeColor',[128 128 128]./255,'MarkerSize',markerSize); %Gray
+            plot(serialTimes(count),icplace,'Marker','-','MarkerEdgeColor',[128 128 128]./255,'MarkerFaceColor',[128 128 128]./255,'MarkerSize',markerSize); %Gray
             hold on
         end
         if isempty(regexp(presentWeather{count},'(GR){1}','once'))~=1
