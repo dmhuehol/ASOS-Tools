@@ -173,15 +173,15 @@ end
 tlabel('x','HH:MM','FixLow',10,'FixHigh',12) %x-axis is date axis; FixLow and FixHigh arguments control the number of ticks that are displayed
 xlim([serialTimes(1)-0.02 serialTimes(end)+0.02]); %For the #aesthetic
 
-titleString = ['Surface observations data for ' ASOS(1).StationID];
+titleString = pad(['Surface observations data for ' ASOS(1).StationID]);
 
 toString = 'to';
 spaceString = {' '}; %The curly brackets are necessary
 windString = 'Upper barbs denote winds; lower barbs denote wind character';
 if dStart==dEnd
     obsDate = datestr(serialTimes(1),'mm/dd/yy');
-    titleMsg = [titleString datestr(obsDate)]; %Builds title message "Surface observations data for mm/dd/yy"
-    titleAndSubtitle = {titleMsg,windString};
+    titleMsg = strcat(titleString,spaceString,datestr(obsDate)); %Builds title message "Surface observations data for mm/dd/yy"
+    titleAndSubtitle = {cell2mat(titleMsg),windString};
 else
     obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
     obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
@@ -384,7 +384,8 @@ else
     weatherCodeTitleString = ['Precip type data for ' ASOS(1).StationID];
     if dStart==dEnd
         obsDate = datestr(serialTimes(1),'mm/dd/yy');
-        titleMsg = [weatherCodeTitleString datestr(obsDate)]; %Builds title message "Precip type data for mm/dd/yy"
+        titleMsg = strcat(weatherCodeTitleString,spaceString,datestr(obsDate)); %Builds title message "Precip type data for mm/dd/yy"
+        titleMsg = {cell2mat(titleMsg)};
     else
         obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
         obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
