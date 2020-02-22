@@ -1,5 +1,5 @@
 # ASOS Tools
- Code for processing, visualizing, and analyzing Automated Surface Observations System (ASOS) data, particularly 5-minute ASOS data.  
+ Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.  
  ## Workflow
  1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array.   
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
@@ -62,9 +62,8 @@ KSLC: Salt Lake City, closest to Alta
  [**TD-6401**](https://www1.ncdc.noaa.gov/pub/data/documentlibrary/tddoc/td6401.pdf) is the official dataset documentation for the ASOS 5-minute data format. However, the information for the weather codes given here is outdated; the codes described in "weather and obstructions" do not correspond to the codes in actual data.
 
 ## Sources and Credit
-------
 
-All code and documentation, unless otherwise specified, written by Daniel Hueholt, under the advisement of Dr. Sandra Yuter at North Carolina State University.  
+Unless otherwise specified, code and documentation, was written and is maintained by Daniel Hueholt under the advisement of Dr. Sandra Yuter at North Carolina State University.  
 [<img src="http://www.environmentanalytics.com/wp-content/uploads/2016/05/cropped-Environment_Analytics_Logo_Draft.png">](http://www.environmentanalytics.com)  
 **addaxis** written by [Harry Lee](https://www.mathworks.com/matlabcentral/profile/authors/863384-harry-lee), found on the [MATLAB File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/9016-addaxis).  
 Copyright (c) 2016, Harry Lee
@@ -110,5 +109,5 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 **windbarb** written by [Laura Tomkins](https://github.com/lauratomkins/), found at the following [github link](https://github.com/lauratomkins/SBJ). Used by permission.
 
-Okabe-Ito colorblind-safe discrete color scale is used for line colors.  
+The Okabe-Ito colorblind-safe discrete color scale is used for line colors.  
 **Okabe, M., and K. Ito. 2008.** “Color Universal Design (CUD): How to Make Figures and Presentations That Are Friendly to Colorblind People.” http://jfly.iam.u-tokyo.ac.jp/color/.
