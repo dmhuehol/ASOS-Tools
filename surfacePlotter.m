@@ -35,8 +35,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 2/17/2020
-    %Last major revision: 11/13/2017
+    %Version date: 2/21/2020
+    %Last major revision: 2/21/2020
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
         %found on the MATLAB File Exchange
@@ -60,15 +60,21 @@ end
 dayIndices = find(logicalDays~=0); %These are the indices of the input day(s)
 if isempty(dayIndices)==1 %If day is not found
     dayMsg = 'No data from input day(s) present in structure!';
-    error(dayMsg); %Give a useful error message
+    error(dayMsg);
 end
 
 extractHours = [ASOS(dayIndices).Hour]; %Array of all hours from the given days
+extractDays = [ASOS(dayIndices).Day]; %Array of all days corresponding to given hours
 logicalHours = logical(extractHours==hStart); %Since it's possible for end to be a number smaller than start and hence deceive the function, start by finding only the start hour
 hStartIndices = find(logicalHours~=0); %These are the indices of the input starting hour
 if isempty(hStartIndices)==1 %If start hour is not found
     startHourMsg = 'Failed to find start hour in structure!';
-    error(startHourMsg); %Give a useful error message
+    error(startHourMsg);
+end
+testDayStart = extractDays(hStartIndices);
+if ~isequal(dStart,testDayStart(1))
+    msg = 'Data for requested start hour is missing!';
+    error(msg);
 end
 
 hStartFirstInd = hStartIndices(1); %This is the first index
@@ -80,7 +86,12 @@ end
 hEndIndices = find(logicalHours~=0); %These are the indices of the ending hour
 if isempty(hEndIndices)==1 %Check to see whether the ending indices were found
     msg = 'Could not find end hour in structure!'; %If not
-    error(msg); %give a useful error message
+    error(msg);
+end
+testDayEnd = extractDays(hEndIndices);
+if ~isequal(dEnd,testDayEnd(end))
+    msg = 'Data for requested end hour is missing!';
+    error(msg);
 end
 hEndFinalInd = hEndIndices(end); %This is the last data index
 
@@ -98,25 +109,28 @@ pressure = pressureInHg.*33.8639; %Convert pressure from the default inches of m
 
 times = [surfaceSubset.Year; surfaceSubset.Month; surfaceSubset.Day; surfaceSubset.Hour; surfaceSubset.Minute; zeros(1,length(surfaceSubset))]; %YMDHM are real from data, S are generated at 0
 serialTimes = datenum(times(1,:),times(2,:),times(3,:),times(4,:),times(5,:),times(6,:)); %Make times into datenumbers
-%Note: use actual datetimes once we update to 2016+
 
 minDegC = nanmin(dewpoint); %Minimum Td will be min for both T and Td, since Td is always less than T
 maxDegC = nanmax(temperature); %Maximum T will be max for both T and Td, since T is always greater than Td
 minHum = nanmin(humidity);
-maxHum = 100.02; %Maximum humidity will always be at least close to 100, so set to just above 100 to make figures consistent while not cutting off 100 values when saving
+maxHum = 100.02; %Maximum humidity will usually be close to 100 in a winter storm, so set to just above 100 to make figures consistent while not cutting off 100 values when saving
 minPre = nanmin(pressure);
 maxPre = nanmax(pressure);
 font = 'Lato Bold';
 labelTxt = 16;
 axTxt = 16;
 
-figure; %Make new figure
+figure;
+%Line colors are from the Okabe-Ito palette
+%Okabe, M., and K. Ito. 2008. ?Color Universal Design (CUD): How to Make
+%Figures and Presentations That Are Friendly to Colorblind People.?
+%http://jfly.iam.u-tokyo.ac.jp/color/.
 tempPlot = plot(serialTimes,temperature); %Plot temperature and dewpoint in deg C
-tempPlot.Color = [0 0 255]./255;
+tempPlot.Color = [86 180 233]./255; %sky blue
 tempPlot.LineWidth = 2.3;
 hold on
 dewPlot = plot(serialTimes,dewpoint);
-dewPlot.Color = [0 255 0]./255;
+dewPlot.Color = [0 158 115]./255; %bluish green
 dewPlot.LineWidth = 2.3;
 ylim([minDegC-4 maxDegC+1]) %Set ylim according to max/min degree; the min limit is offset by -3 instead of -1 in order to make room for the wind barbs
 celsiusLabelHand = ylabel([char(176) 'C']);
@@ -124,10 +138,10 @@ set(celsiusLabelHand,'FontName',font); set(celsiusLabelHand,'FontSize',labelTxt)
 degCaxis = gca; %Grab axis in order to change color
 set(degCaxis,'YColor',[0 112 115]./255); %Teal - note that this is the same axis for temperature (blue) and dewpoint (green)
 set(degCaxis,'FontName',font); set(degCaxis,'FontSize',axTxt);
-addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[255 170 0]./255,'LineWidth',2.3); %Plot pressure in hPa
+addaxis(serialTimes,pressure,[minPre-0.2 maxPre+0.2],'Color',[230 159 0]./255,'LineWidth',2.3); %Plot pressure in hPa
 pressureLabelHand = addaxislabel(2,'hPa');
 set(pressureLabelHand,'FontName',font); set(pressureLabelHand,'FontSize',labelTxt);
-addaxis(serialTimes,humidity,[minHum-10 maxHum],'m','LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
+addaxis(serialTimes,humidity,[minHum-10 maxHum],'Color',[204 121 167]./255,'LineWidth',2.3); %Plot humidity in %, leaving max at maxHum because it's 100
 humidityLabelHand = addaxislabel(3,'%');
 set(humidityLabelHand,'FontName',font); set(humidityLabelHand,'FontSize',labelTxt);
 legendHand = legend('Dewpoint','Temperature','Pressure','Humidity','AutoUpdate','off');
@@ -140,8 +154,7 @@ set(allAxes(3),'FontName',font); set(allAxes(3),'FontSize',axTxt);
 %Note this is on the same plot as above data
 windSpd = [surfaceSubset.WindSpeed]; %Wind speed data
 windDir = [surfaceSubset.WindDirection]; %Wind direction data
-windCharSpd = [surfaceSubset.WindCharacterSpeed]; %Wind character speed data - currently wind character is not displayed,
-    %which is sort of acceptable in the short term because essentially all wind characters at Upton are gusts
+windCharSpd = [surfaceSubset.WindCharacterSpeed]; %Wind character speed data - currently wind character string (i.e. gust, squall) is not displayed
 barbScale = 0.028; %Modifies the size of the wind barbs for both wind character and regular wind barbs
 
 if length(serialTimes)>100 %When plotting over a long period of time, displaying all wind barbs takes very long and makes the figure confusing
@@ -151,7 +164,7 @@ else
 end
 for windCount = length(serialTimes):spacer:1 %Loop backwards through winds
     windbarb(serialTimes(windCount),minDegC-2.5,windSpd(windCount),windDir(windCount),barbScale,0.09,'r',1); %#justiceforbarb
-    if isnan(windCharSpd(windCount))~=1 %If there is a wind character entry
+    if isnan(windCharSpd(windCount))~=1 %#ok (code analyzer is wrong) %If there is a wind character entry
         windbarb(serialTimes(windCount),minDegC-3.5,windCharSpd(windCount),windDir(windCount),barbScale,0.09,[179 77 77]./255,1); %Make wind barb for the character as well
     end
     hold on %Otherwise only one barb will be plotted
@@ -160,14 +173,15 @@ end
 tlabel('x','HH:MM','FixLow',10,'FixHigh',12) %x-axis is date axis; FixLow and FixHigh arguments control the number of ticks that are displayed
 xlim([serialTimes(1)-0.02 serialTimes(end)+0.02]); %For the #aesthetic
 
-titleString = 'Surface observations data for ';
+titleString = pad(['Surface observations data for ' ASOS(1).StationID]);
+
 toString = 'to';
-spaceString = {' '}; %Yes those curly brackets are needed
+spaceString = {' '}; %The curly brackets are necessary
 windString = 'Upper barbs denote winds; lower barbs denote wind character';
 if dStart==dEnd
     obsDate = datestr(serialTimes(1),'mm/dd/yy');
-    titleMsg = [titleString datestr(obsDate)]; %Builds title message "Surface observations data for mm/dd/yy"
-    titleAndSubtitle = {titleMsg,windString};
+    titleMsg = strcat(titleString,spaceString,datestr(obsDate)); %Builds title message "Surface observations data for mm/dd/yy"
+    titleAndSubtitle = {cell2mat(titleMsg),windString};
 else
     obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
     obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
@@ -191,19 +205,10 @@ else
     %mist, rain, freezing drizzle, drizzle, freezing rain, sleet, graupel,
     %snow, unknown precipitation, hail, ice crystals, thunder
     %
-    %KNOWN PROBLEM: ASOS sometimes misrepresents precipitation type.
+    %NOTE ABOUT DATA QUALITY: ASOS sometimes misrepresents precipitation type.
     %Especially troublesome types are graupel (which is usually displayed
     %as snow), partially melted particles (which displays as rain), and
-    %slush (which displays as rain). Someday the codes might be able to be 
-    %cross-checked against other environmental variables or a database of 
-    %flake pictures but currently the user must simply remain aware of this
-    %issue.
-    %NOTE: it may seem that partially melted particles and slush are
-    %misidentified as freezing rain, but ASOS is likely more or less correct here, as
-    %these particles behave as freezing rain (freezing on contact with the
-    %surface). Technically, they aren't rain per se (rather freezing slush
-    %or freezing partially melted particles) but these precipitation
-    %categories do not exist.
+    %slush (which displays as rain). 
     
     %Initialize variables to check for precipitation type presence
     fogchk = 0; frzfogchk = 0; mistchk = 0; rainchk = 0; frzdrizchk = 0; drizchk = 0; frzrainchk = 0;
@@ -368,7 +373,7 @@ else
         set(presentAxis,'YTickLabel',presentLabels); %Label the wires
     catch
         disp('No precipitation weather codes reported!')
-        % e.g. for SQ
+        % Non-precip weather codes include SQ (squall)
         close
         return
     end
@@ -376,10 +381,11 @@ else
     xlabel('Time (hour)')
   
     %Make adaptive title including start and end times
-    weatherCodeTitleString = 'Precip type data for ';
+    weatherCodeTitleString = ['Precip type data for ' ASOS(1).StationID];
     if dStart==dEnd
         obsDate = datestr(serialTimes(1),'mm/dd/yy');
-        titleMsg = [weatherCodeTitleString datestr(obsDate)]; %Builds title message "Precip type data for mm/dd/yy"
+        titleMsg = strcat(weatherCodeTitleString,spaceString,datestr(obsDate)); %Builds title message "Precip type data for mm/dd/yy"
+        titleMsg = {cell2mat(titleMsg)};
     else
         obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
         obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');

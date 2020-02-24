@@ -103,6 +103,7 @@ else
 end
 
 for count = length(ASOSstruct):-1:1
+    usefulStruct(count).StationID = ASOSstruct(1).FurtherID;
     usefulStruct(count).Year = sscanf(ASOSstruct(count).Year,'%4f'); %sscanf is fastest way to convert from string to number
     usefulStruct(count).Month = sscanf(ASOSstruct(count).Month,'%f');
     usefulStruct(count).Day = sscanf(ASOSstruct(count).ZuluTime(1:2),'%2f'); %We use Z time as the default time in usefulStruct to make it easier to compare ASOS data with other data sets
