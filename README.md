@@ -1,5 +1,20 @@
 # ASOS Tools
- Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.  
+ Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.
+ 
+ ## Table of Contents
+* [**Workflow**](https://github.com/dmhuehol/ASOS-Tools#Workflow)  
+* [**Example images**](https://github.com/dmhuehol/ASOS-Tools#example-images)  
+    * [Code to replicate example images](https://github.com/dmhuehol/ASOS-Tools#code-to-replicate-example-images)  
+* [**Finding ASOS stations**](https://github.com/dmhuehol/ASOS-Tools#finding-asos-stations)  
+    * [List of common ASOS stations](https://github.com/dmhuehol/ASOS-Tools#list-of-common-asos-stations)  
+        * [Long Island area](https://github.com/dmhuehol/ASOS-Tools#long-island-area)  
+        * [Northeast US](https://github.com/dmhuehol/ASOS-Tools#northeast-us)  
+        * [Selected co-located ASOS and radiosonde launch sites](https://github.com/dmhuehol/ASOS-Tools#selected-co-located-asos-and-radiosonde-launch-sites)  
+        * [Front Range](https://github.com/dmhuehol/ASOS-Tools#front-range)  
+        * [Utah](https://github.com/dmhuehol/ASOS-Tools#utah)        
+* [**ASOS documentation**](https://github.com/dmhuehol/ASOS-Tools#asos-documentation)  
+* [**Sources and Credit**](https://github.com/dmhuehol/ASOS-Tools#sources-and-credit)
+ 
  ## Workflow
  1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array.   
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
@@ -17,7 +32,7 @@ The second type of figure is an abacus plot that displays precipitation type, as
 3. [winterStormEx] = **surfacePlotter**(9,9,9,21,krdu_1218)
  
  # Finding ASOS Stations
- There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Additionally, some common ASOS stations used by our group are listed below.
+ There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Some common ASOS stations used by our Environment Analytics group are listed below.
  ### List of Common ASOS Stations
  ----
  #### Long Island area
