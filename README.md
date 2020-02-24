@@ -4,7 +4,8 @@
  ## Table of Contents
 * [**Workflow**](https://github.com/dmhuehol/ASOS-Tools#Workflow)  
 * [**Example images**](https://github.com/dmhuehol/ASOS-Tools#example-images)  
-    * [Code to replicate example images](https://github.com/dmhuehol/ASOS-Tools#code-to-replicate-example-images)  
+    * [Code to replicate example images](https://github.com/dmhuehol/ASOS-Tools#code-to-replicate-example-images) 
+* [**Searching for weather codes**](https://github.com/dmhuehol/ASOS-Tools#searching-for-weather-codes)
 * [**Finding ASOS stations**](https://github.com/dmhuehol/ASOS-Tools#finding-asos-stations)  
     * [List of common ASOS stations](https://github.com/dmhuehol/ASOS-Tools#list-of-common-asos-stations)  
         * [Long Island area](https://github.com/dmhuehol/ASOS-Tools#long-island-area)  
@@ -27,9 +28,16 @@ The second type of figure is an abacus plot that displays precipitation type, as
 ![Example abacus plot](images/ex_abacus_raleigh_20181209.png)
 
 ### Code to replicate example images
-1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,2018,12,path)
+1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,'KRDU',2018,12,path)
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
 3. [winterStormEx] = **surfacePlotter**(9,9,9,21,krdu_1218)
+
+## Searching for weather codes
+A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. **weatherCodeSearch** outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command:  
+[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('PL',krdu_1218)  
+**dates** contains strings of all the days where the input codes occurred  
+**exactTimes** stores the exact dates and times of all observations as datestrings  
+**exactDatenums** stores the exact dates and times of all observations as datenums  
  
  # Finding ASOS Stations
  There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Some common ASOS stations used by our Environment Analytics group are listed below.
