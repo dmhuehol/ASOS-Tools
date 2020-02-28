@@ -12,8 +12,10 @@
     %surfaceSubset: a subset of ASOS data corresponding to the input times.
     %
     %Inputs:
-    %time: a structure containing fields for startDay, endDay, startHour,
-    %   and endHour
+    %dStart: 1 or 2 digit starting day
+    %hStart: 1 or 2 digit starting hour
+    %dEnd: 1 or 2 digit ending day
+    %hEnd: 1 or 2 digit ending hour
     %ASOS: structure of ASOS data
     %
     %Figures:
@@ -33,8 +35,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 2/27/2020
-    %Last major revision: 2/27/2020
+    %Version date: 2/21/2020
+    %Last major revision: 2/21/2020
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
         %found on the MATLAB File Exchange
@@ -48,15 +50,7 @@
     %windbarb
     %
     
-function [surfaceSubset] = surfacePlotter(time,ASOS)
-%yStart = time.yStart;
-%mStart = time.mStart;
-dStart = time.startDay;
-hStart = time.startHour;
-%yEnd = time.yEnd;
-%mEnd = time.mEnd;
-dEnd = time.endDay;
-hEnd = time.endHour;
+function [surfaceSubset] = surfacePlotter(dStart,hStart,dEnd,hEnd,ASOS)
 %% Locate the requested data
 extractDays = [ASOS.Day]; %Array of all days within the given structure, bracket is required to form an array instead of list
 logicalDays = logical(extractDays==dStart | extractDays==dEnd); %Logically index the days; 1 represents start/end day entries, 0 represents all others
