@@ -1,29 +1,27 @@
 %%surfacePlotter
     %Visualizes ASOS 5-minute data on two figures. One is a surface conditions
-    %plot which plots temperature, dewpoint, pressure, and relative
-    %humidity data on a standard xy plot and shows wind data using wind
+    %plot which plots a timeseries of temperature, dewpoint, pressure, and
+    %relative humidity data on a standard xy plot and shows wind data using wind
     %barbs, and the other is an abacus plot which visualizes
     %precipitation type. Additionally, returns the subset of the input
     %ASOS structure corresponding to the requested times.
     %
-    %General form: [surfaceSubset] = surfacePlotter(dStart,hStart,dEnd,hEnd,ASOS)
+    %General form: [surfaceSubset] = surfacePlotter(startDatetime,endDatetime,ASOS)
     %
     %Output:
     %surfaceSubset: a subset of ASOS data corresponding to the input times.
     %
     %Inputs:
-    %dStart: 1 or 2 digit starting day
-    %hStart: 1 or 2 digit starting hour
-    %dEnd: 1 or 2 digit ending day
-    %hEnd: 1 or 2 digit ending hour
+    %startDatetime: datetime created with datetime(Y,M,D,H,m,S)
+    %endDatetime: datetime created with datetime(Y,M,D,H,m,S)
     %ASOS: structure of ASOS data
     %
     %Figures:
-    %surface conditions: three-axis plot against time displaying humidity,
-    %surface pressure, and temperature/dewpoint, with wind and wind
-    %character velocity displayed as barbs
-    %precipitation: abacus plot against time plotting weather codes as
-    %wires, with beads representing the current precipitation type(s)
+    %surface conditions: three-axis timeseries displaying humidity,
+    %   surface pressure, and temperature/dewpoint, with wind and wind
+    %   character velocity displayed as barbs
+    %precipitation: abacus plot timeseries of weather codes as wires, with
+    %   beads representing the current precipitation type(s)
     %
     %Requires external functions tlabel, addaxis, and windbarb
     %   Be sure to add the addaxis6 folder to the path before running
@@ -35,8 +33,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 2/21/2020
-    %Last major revision: 2/21/2020
+    %Version date: 2/28/2020
+    %Last major revision: 2/28/2020
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
         %found on the MATLAB File Exchange
@@ -46,59 +44,34 @@
         %Github at user profile @lauratomkins
     %
     %
-    %See also abacusdemo, tlabel, addaxis, addaxislabel, ASOSimportFiveMin,
-    %windbarb
+    %See also ASOSdownloadFiveMin, ASOSimportFiveMin
     %
     
-function [surfaceSubset] = surfacePlotter(dStart,hStart,dEnd,hEnd,ASOS)
+function [surfaceSubset] = surfacePlotter(startDatetime,endDatetime,ASOS)
+
+if ~isequal(startDatetime.Second,0) || ~isequal(endDatetime.Second,0)
+    secondWarning = 'ASOS does not record to second precision! Correcting input to zero...';
+    warning(secondWarning)
+    startDatetime.Second = 0;
+    endDatetime.Second = 0;
+    disp(['Corrected start time is: ' datestr(startDatetime)])
+    disp(['Corrected start time is: ' datestr(endDatetime)])
+else
+    disp(['Start time is: ' datestr(startDatetime)])
+    disp(['End time is: ' datestr(endDatetime)])
+end
+
 %% Locate the requested data
-extractDays = [ASOS.Day]; %Array of all days within the given structure, bracket is required to form an array instead of list
-logicalDays = logical(extractDays==dStart | extractDays==dEnd); %Logically index the days; 1 represents start/end day entries, 0 represents all others
-if dStart==1
-    logicalDays(end-120:end) = 0; %Zero out any indices that could possibly be associated with the first day of the next month
-end
-dayIndices = find(logicalDays~=0); %These are the indices of the input day(s)
-if isempty(dayIndices)==1 %If day is not found
-    dayMsg = 'No data from input day(s) present in structure!';
-    error(dayMsg);
+extractDt = [ASOS.Datetime]; %Array of all datetimes within the given structure, bracket is required to form an array instead of a list
+logicalDt = logical(extractDt==startDatetime | extractDt==endDatetime);
+dtIndices = find(logicalDt~=0);
+
+if isempty(nonzeros(logicalDt))
+    noDataMsg = 'No data from input times present in structure!';
+    error(noDataMsg)
 end
 
-extractHours = [ASOS(dayIndices).Hour]; %Array of all hours from the given days
-extractDays = [ASOS(dayIndices).Day]; %Array of all days corresponding to given hours
-logicalHours = logical(extractHours==hStart); %Since it's possible for end to be a number smaller than start and hence deceive the function, start by finding only the start hour
-hStartIndices = find(logicalHours~=0); %These are the indices of the input starting hour
-if isempty(hStartIndices)==1 %If start hour is not found
-    startHourMsg = 'Failed to find start hour in structure!';
-    error(startHourMsg);
-end
-testDayStart = extractDays(hStartIndices);
-if ~isequal(dStart,testDayStart(1))
-    msg = 'Data for requested start hour is missing!';
-    error(msg);
-end
-
-hStartFirstInd = hStartIndices(1); %This is the first index
-logicalHours = logical(extractHours==hEnd); %Remake the logical matrix, this time logically indexing on the input ending hour (INCLUDES data from the hEnd hour)
-if hStart==hEnd %For cases where the end hour and start hour are the same number
-    indStartAndEnd = find(diff(logicalHours)~=0); %Locate the bounds of indices corresponding to starting and ending hours
-    logicalHours(indStartAndEnd(1):indStartAndEnd(2)) = 0; %Zero all the indices that corresponded to the start hour
-end
-hEndIndices = find(logicalHours~=0); %These are the indices of the ending hour
-if isempty(hEndIndices)==1 %Check to see whether the ending indices were found
-    msg = 'Could not find end hour in structure!'; %If not
-    error(msg);
-end
-testDayEnd = extractDays(hEndIndices);
-if ~isequal(dEnd,testDayEnd(end))
-    msg = 'Data for requested end hour is missing!';
-    error(msg);
-end
-hEndFinalInd = hEndIndices(end); %This is the last data index
-
-dataHourSpan = [hStartFirstInd hEndFinalInd]; %This is the span of indices corresponding to hour locations within the found days
-dataSpan = [dayIndices(dataHourSpan(1)) dayIndices(dataHourSpan(2))]; %This is the span of indices corresponding to data positions in the actual structure
-
-surfaceSubset = ASOS(dataSpan(1):dataSpan(2)); %Extract the requested data from the structure
+surfaceSubset = ASOS(dtIndices(1):dtIndices(2)); %Extract the requested data from the structure
 
 %% Plot Td, T, RH, P, wind data
 dewpoint = [surfaceSubset.Dewpoint]; %Dewpoint data
@@ -107,8 +80,9 @@ humidity = [surfaceSubset.RelativeHumidity]; %Humidity
 pressureInHg = [surfaceSubset.Altimeter]; %Pressure
 pressure = pressureInHg.*33.8639; %Convert pressure from the default inches of mercury to the more useful hPa
 
-times = [surfaceSubset.Year; surfaceSubset.Month; surfaceSubset.Day; surfaceSubset.Hour; surfaceSubset.Minute; zeros(1,length(surfaceSubset))]; %YMDHM are real from data, S are generated at 0
-serialTimes = datenum(times(1,:),times(2,:),times(3,:),times(4,:),times(5,:),times(6,:)); %Make times into datenumbers
+serialTimes = datenum([surfaceSubset.Datetime]); %Make times into datenumbers
+% While datetimes are generally better, the coordinate calculations in
+% windbarb fail on datetimes and work with datenums.
 
 minDegC = nanmin(dewpoint); %Minimum Td will be min for both T and Td, since Td is always less than T
 maxDegC = nanmax(temperature); %Maximum T will be max for both T and Td, since T is always greater than Td
@@ -153,7 +127,11 @@ set(allAxes(3),'FontName',font); set(allAxes(3),'FontSize',axTxt);
 %%Plot wind data
 %Note this is on the same plot as above data
 windSpd = [surfaceSubset.WindSpeed]; %Wind speed data
-windDir = [surfaceSubset.WindDirection]; %Wind direction data
+windDir = {surfaceSubset.WindDirection}; %Wind direction data
+noWindDir = cellfun('isempty',windDir); %'isempty' is faster than @isempty
+windDir(noWindDir) = {0}; %Insert 0 into all empty cells, otherwise conversion to double removes blank entries
+windDir = cell2mat(windDir); %Convert to double
+
 windCharSpd = [surfaceSubset.WindCharacterSpeed]; %Wind character speed data - currently wind character string (i.e. gust, squall) is not displayed
 barbScale = 0.028; %Modifies the size of the wind barbs for both wind character and regular wind barbs
 
@@ -163,7 +141,8 @@ else
     spacer = -1; %When plotting over an interval of a few hours, display all winds
 end
 for windCount = length(serialTimes):spacer:1 %Loop backwards through winds
-    windbarb(serialTimes(windCount),minDegC-2.5,windSpd(windCount),windDir(windCount),barbScale,0.09,'r',1); %#justiceforbarb
+    cats = datenum(serialTimes(windCount));
+    windbarb(cats,minDegC-2.5,windSpd(windCount),windDir(windCount),barbScale,0.09,'r',1); %#justiceforbarb
     if isnan(windCharSpd(windCount))~=1 %#ok (code analyzer is wrong) %If there is a wind character entry
         windbarb(serialTimes(windCount),minDegC-3.5,windCharSpd(windCount),windDir(windCount),barbScale,0.09,[179 77 77]./255,1); %Make wind barb for the character as well
     end
@@ -178,17 +157,10 @@ titleString = pad(['Surface observations data for ' ASOS(1).StationID]);
 toString = 'to';
 spaceString = {' '}; %The curly brackets are necessary
 windString = 'Upper barbs denote winds; lower barbs denote wind character';
-if dStart==dEnd
-    obsDate = datestr(serialTimes(1),'mm/dd/yy');
-    titleMsg = strcat(titleString,spaceString,datestr(obsDate)); %Builds title message "Surface observations data for mm/dd/yy"
-    titleAndSubtitle = {cell2mat(titleMsg),windString};
-else
-    obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
-    obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
-    titleMsg = strcat(titleString,spaceString,datestr(obsDate1),spaceString,toString,spaceString,datestr(obsDate2)); %Builds title message "Surface observations data for mm/dd/yy"
-    titleAndSubtitle = {cell2mat(titleMsg),windString}; %Adds the above subtitle
-    %I agree that the above syntax is unwieldy but oh well
-end
+obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
+obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
+titleMsg = strcat(titleString,spaceString,datestr(obsDate1),spaceString,toString,spaceString,datestr(obsDate2)); %Builds title message "Surface observations data for mm/dd/yy"
+titleAndSubtitle = {cell2mat(titleMsg),windString}; %Adds the above subtitle
 surfaceTitleHand = title(titleAndSubtitle);
 set(surfaceTitleHand,'FontName','Lato Bold'); set(surfaceTitleHand,'FontSize',16)
 xlabelHand = xlabel('Hour');
@@ -382,15 +354,9 @@ else
   
     %Make adaptive title including start and end times
     weatherCodeTitleString = ['Precip type data for ' ASOS(1).StationID];
-    if dStart==dEnd
-        obsDate = datestr(serialTimes(1),'mm/dd/yy');
-        titleMsg = strcat(weatherCodeTitleString,spaceString,datestr(obsDate)); %Builds title message "Precip type data for mm/dd/yy"
-        titleMsg = {cell2mat(titleMsg)};
-    else
-        obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
-        obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
-        titleMsg = strcat(weatherCodeTitleString,spaceString,datestr(obsDate1),spaceString,toString,spaceString,datestr(obsDate2)); %Builds title message "Precip type data for mm/dd/yy HH:MM to mm/dd/yy HH:MM"
-    end
+    obsDate1 = datestr(serialTimes(1),'mm/dd/yy HH:MM');
+    obsDate2 = datestr(serialTimes(end),'mm/dd/yy HH:MM');
+    titleMsg = strcat(weatherCodeTitleString,spaceString,datestr(obsDate1),spaceString,toString,spaceString,datestr(obsDate2)); %Builds title message "Precip type data for mm/dd/yy HH:MM to mm/dd/yy HH:MM"
     precipTitleHand = title(titleMsg);
     set(precipTitleHand,'FontSize',20); set(precipTitleHand,'FontName','Lato Bold')
     tlabel('x','HH:MM','FixLow',10,'FixHigh',12) %Set axis to be the same as surface conditions plot
