@@ -38,8 +38,8 @@
     %Links to useful ASOS documentation can be found in the
     %EnvAn-WN-Phase-2 repository readme on github user page @dmhuehol.
     %
-    %Version date: 6/11/2018
-    %Last major revision: 6/11/2018
+    %Version date: 2/28/2020
+    %Last major revision: 2/28/2020
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University
@@ -124,6 +124,7 @@ for count = length(ASOSstruct):-1:1
         end
     usefulStruct(count).Hour = str2num(ASOSstruct(count).ZuluTime(3:4)); %#ok %str2double and sscanf both fail here, sometimes str2num is just more robust
     usefulStruct(count).Minute = str2num(ASOSstruct(count).ZuluTime(5:6)); %#ok %str2double and sscanf both fail here, sometimes str2num is just more robust
+    usefulStruct(count).Datetime = datetime(usefulStruct(count).Year,usefulStruct(count).Month,usefulStruct(count).Day,usefulStruct(count).Hour,usefulStruct(count).Minute,0); %Uses fake seconds to build datenums
     usefulStruct(count).VariableWind = wind(count).Variable;
     usefulStruct(count).WindDirection = sscanf(wind(count).WindDirection,'%2f').*10;
     usefulStruct(count).WindSpeed = str2double(wind(count).WindSpeed); %sscanf fails here, str2double is used instead
