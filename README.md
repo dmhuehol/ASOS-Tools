@@ -19,7 +19,7 @@
  ## Workflow
  1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array.   
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
- 3. [subsetStruct] = **surfacePlotter**(start_day,start_hour,end_day,end_hour,primaryStruct) plots the data in the structure created in step 2.
+ 3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots the data in the structure created in step 2.
  
  ## Example images
  The **surfacePlotter** generates two types of figures. The first, which is always produced, is a timeseries for sea-level pressure, temperature, dewpoint, relative humidity with respect to water, wind, and wind character. The example shown below is drawn from a winter storm in Raleigh, NC on December 9, 2018.  
@@ -30,7 +30,8 @@ The second type of figure is an abacus plot that displays precipitation type, as
 ### Code to replicate example images
 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,'KRDU',2018,12,path)
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
-3. [winterStormEx] = **surfacePlotter**(9,9,9,21,krdu_1218)
+3. startDatetime = **datetime**(2018,12,9,0,0); endDatetime = **datetime**(2018,12,21,0,0);
+3. [winterStormEx] = **surfacePlotter**(startDatetime,endDatetime,krdu_1218)
 
 ## Searching for weather codes
 A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. **weatherCodeSearch** outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command:  
