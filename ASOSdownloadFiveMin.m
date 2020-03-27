@@ -2,7 +2,7 @@
     %Function to download five minute ASOS data from NCDC servers. Requires
     %an Internet connection.
     %
-    %General form: ASOSdownloadFiveMin(emailAddress,station,year,month,downloadedFilePath)
+    %General form: [downloadedFilenames] = ASOSdownloadFiveMin(emailAddress,station,year,month,downloadedFilePath)
     %
     %Inputs:
     %emailAddress: The user's complete email address. This is required by
@@ -21,7 +21,7 @@
     %Note: if function is failing for no apparent cause, it is likely an NCDC server problem.
     %Wait some time and try again, or try a different email address.
     %
-    %Version Date: 2/23/2020
+    %Version Date: 3/27/2020
     %Last major revision: 2/23/2020
     %Written by: Daniel Hueholt
     %North Carolina State University
