@@ -18,7 +18,7 @@
     %downloadedFilenames: 3D cell array of filenames created by the new
     %files. D1=year, D2=station, D3=month
     %
-    %Note: if function is failing for no apparent cause, it is likely an NCDC server problem.
+    %Note: if function is failing for no apparent cause, it is likely an NCEI server problem.
     %Wait some time and try again, or try a different email address.
     %
     %Version Date: 3/27/2020
