@@ -21,7 +21,7 @@
     %Note: if function is failing for no apparent cause, it is likely an NCEI server problem.
     %Wait some time and try again, or try a different email address.
     %
-    %Version Date: 3/27/2020
+    %Version Date: 4/10/2020
     %Last major revision: 2/23/2020
     %Written by: Daniel Hueholt
     %North Carolina State University
