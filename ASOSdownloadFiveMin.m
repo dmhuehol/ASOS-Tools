@@ -5,8 +5,8 @@
     %General form: [downloadedFilenames] = ASOSdownloadFiveMin(emailAddress,station,year,month,downloadedFilePath)
     %
     %Inputs:
-    %emailAddress: The user's complete email address. This is required by
-    %the NCDC FTP server.
+    %emailAddress: The user's complete email address as a string. This is
+    %required by the NCEI FTP server.
     %station: Four character station ID or cell array of station IDs
     %year: Four-digit year or array of years
     %month: One or two-digit month or array of months. Use 'all' to download a full year.
