@@ -14,8 +14,8 @@
         * [Front Range](https://github.com/dmhuehol/ASOS-Tools#front-range)  
         * [Utah](https://github.com/dmhuehol/ASOS-Tools#utah)        
 * [**ASOS documentation**](https://github.com/dmhuehol/ASOS-Tools#asos-documentation)  
-* [**Problems**](https://github.com/dmhuehol/ASOS-Tools#problems)
-    * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](https://github.com/dmhuehol/ASOS-Tools#i-downloaded-data-then-cleared-my-workspace-closed-MATLAB-and-lost-all-the-filenames)  
+* [**Problems**](https://github.com/dmhuehol/ASOS-Tools#resolving-problems)
+    * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](https://github.com/dmhuehol/ASOS-Tools#i-downloaded-data-then-cleared-my-workspaceclosed-matlab-and-lost-all-the-filenames)  
 * [**Sources and Credit**](https://github.com/dmhuehol/ASOS-Tools#sources-and-credit)
  
  ## Workflow
