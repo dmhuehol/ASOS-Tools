@@ -31,7 +31,7 @@
     %using MATLAB, see ASOSdownloadFiveMin. To download an ASOS data file
     %by hand, go to:
     %   ftp://ftp.ncdc.noaa.gov/pub/data/asos-fivemin/
-    %(link active as of 6/07/2018)
+    %(link active as of 5/26/2020)
     %
     %If you are attempting to import only a single month from a single site,
     %use ASOSimportFiveMin instead.
