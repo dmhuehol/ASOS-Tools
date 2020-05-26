@@ -21,8 +21,8 @@
     %Note: if function is failing for no apparent cause, it is likely an NCEI server problem.
     %Wait some time and try again, or try a different email address.
     %
-    %Version Date: 4/10/2020
-    %Last major revision: 2/23/2020
+    %Version Date: 5/26/2020
+    %Last major revision: 5/26/2020
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
@@ -119,6 +119,14 @@ for y_c = length(year):-1:1
 end
 close(ftpNCDC) %Closes FTP connection
 
+% Save filenames as a separate variable
+currentTimeStr = datestr(now,'yyyymmdd_HHMMSS');
+filenamesSaveName = strcat('downloadedFilenames_requested_',currentTimeStr);
+filenamesSavePath = strcat(downloadedFilePath,filenamesSaveName);
+save(filenamesSavePath,'downloadedFilenames')
+disp(['Cell array of downloaded filenames saved to: ' filenamesSavePath])
+
+% Completed!
 completeMessage = 'Download complete!';
 disp(completeMessage);
 end
