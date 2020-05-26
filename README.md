@@ -14,10 +14,12 @@
         * [Front Range](https://github.com/dmhuehol/ASOS-Tools#front-range)  
         * [Utah](https://github.com/dmhuehol/ASOS-Tools#utah)        
 * [**ASOS documentation**](https://github.com/dmhuehol/ASOS-Tools#asos-documentation)  
+* [**Problems**](https://github.com/dmhuehol/ASOS-Tools#problems)
+    * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](https://github.com/dmhuehol/ASOS-Tools#i-downloaded-data-then-cleared-my-workspace-closed-MATLAB-and-lost-all-the-filenames)  
 * [**Sources and Credit**](https://github.com/dmhuehol/ASOS-Tools#sources-and-credit)
  
  ## Workflow
- 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array.   
+ 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
  3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots the data in the structure created in step 2.
  
@@ -84,6 +86,10 @@ KSLC: Salt Lake City, closest to Alta
  [**NWS Surface Training**](https://web.archive.org/web/20170510212516/https://www.nws.noaa.gov/om/forms/resources/SFCTraining.pdf) is a NWS training guide originally created to help NWS personnel interpret METAR/SPECI weather observations, which are in a similar format to ASOS. This document includes many of the present weather codes found in ASOS, but not all of them.  
  [**Federal Meteorological Handbook**](https://www.ofcm.gov/publications/fmh/FMH1/FMH1.pdf) defines standards for reporting surface conditions, with Table 8-5 including all of the codes used by ASOS. However, as it is designed for meteorological observers, it doesn't discuss any of the science behind the ASOS observation strategies.  
  [**TD-6401**](https://www1.ncdc.noaa.gov/pub/data/documentlibrary/tddoc/td6401.pdf) is the official dataset documentation for the ASOS 5-minute data format. However, the information for the weather codes given here is outdated; the codes described in "weather and obstructions" do not correspond to the codes in actual data.
+ 
+# Resolving problems
+### I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!
+The cell array of filenames that's output to the workspace is saved as a .mat file to the same directory as the ASOS data. Navigate to the directory in MATLAB's file viewer and open it manually, or use the MATLAB **load** function. The filename is saved with the naming convention "downloadedFilenames_requested_yyyymmdd_HHMMSS" where the time of the filename corresponds to the time the save command ran within the function.
 
 ## Sources and Credit
 
