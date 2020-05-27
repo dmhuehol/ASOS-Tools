@@ -107,6 +107,8 @@ KSLC: Salt Lake City, closest to Alta
 # Resolving problems
 ### I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!
 The cell array of filenames that's output to the workspace is saved as a .mat file to the same directory as the ASOS data. Navigate to the directory in MATLAB's file viewer and open it manually, or use the MATLAB **load** function. The filename is saved with the naming convention "downloadedFilenames_requested_yyyymmdd_HHMMSS" where the time of the filename corresponds to the time the save command ran within the function.
+### Error using connect, error in ftp when running ASOSdownloadFiveMin
+This tends to happen when one makes a large number of requests in a very short span of time. Try waiting a few minutes and running the function again. If the problem persists, it is likely a temporary problem or maintenance on the NCEI server. Wait 24 hours and try again.
 
 ## Sources and Credit
 
