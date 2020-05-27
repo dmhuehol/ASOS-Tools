@@ -18,10 +18,10 @@
     * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](https://github.com/dmhuehol/ASOS-Tools#i-downloaded-data-then-cleared-my-workspaceclosed-matlab-and-lost-all-the-filenames)  
 * [**Sources and Credit**](https://github.com/dmhuehol/ASOS-Tools#sources-and-credit)
  
- ## Workflow
+ ## Workflow for individual files
  1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) to download a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
- 3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots the data in the structure created in step 2.
+ 3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots data in the structure created in step 2.
  
  ## Example images
  The **surfacePlotter** generates two types of figures. The first, which is always produced, is a timeseries for sea-level pressure, temperature, dewpoint, relative humidity with respect to water, wind, and wind character. The example shown below is drawn from a winter storm in Raleigh, NC on December 9, 2018.  
@@ -33,7 +33,20 @@ The second type of figure is an abacus plot that displays precipitation type, as
 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,'KRDU',2018,12,path)
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
 3. startDatetime = **datetime**(2018,12,9,0,0); endDatetime = **datetime**(2018,12,21,0,0);
-3. [winterStormEx] = **surfacePlotter**(startDatetime,endDatetime,krdu_1218)
+4. [winterStormEx] = **surfacePlotter**(startDatetime,endDatetime,krdu_1218)
+
+## Workflow for multiple files
+1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) downloads files to the folder given by the path variable. To download multiple sites, input them as a cell array. Multiple years or months can be input as arrays. The output downloadedFilenames contains all of the downloaded filenames in a 3-dimensional cell array, where D1 represents years, D2 is stations, and D3 corresponds to months.
+2. [primaryCompositeStruct,fullCompositeStruct] = **ASOSimportManyFiveMin**(downloadedFilenames,stationList) imports the files at downloadedFilenames corresponding to the stations input as a cell array in stationList.  
+The composite structures contain substructures corresponding to each station, accessible with dot notation. The other functions like **surfacePlotter** and **weatherCodeSearch** can be used on the substructures inside of the composite.  
+
+### Example for multiple files
+This example downloads and imports all data from March through May for the years 2017-2019 at stations KISP, KHWV, and KFRG.
+1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,{'KISP','KHWV','KFRG'},2017:2019,3:5,path)
+2. [pComposite,fComposite] = **ASOSimportManyFiveMin**(downloadedFilenames,{'KISP','KHWV','KFRG'})  
+To plot data from 1200-1500 24 March 2018 at KHWV from this structure:
+3. startDatetime = **datetime**(2018,3,24,12,0,0); endDatetime = **datetime**(2018,3,24,15,0,0);
+4. [subset] = **surfacePlotter**(startDatetime,endDatetime,pComposite.KHWV)
 
 ## Searching for weather codes
 A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. **weatherCodeSearch** outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command:  
