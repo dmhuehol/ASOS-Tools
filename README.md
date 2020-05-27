@@ -2,9 +2,11 @@
  Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.
  
  ## Table of Contents
-* [**Workflow**](https://github.com/dmhuehol/ASOS-Tools#Workflow)  
+* [**Workflow for individual files**](https://github.com/dmhuehol/ASOS-Tools#Workflow)  
 * [**Example images**](https://github.com/dmhuehol/ASOS-Tools#example-images)  
     * [Code to replicate example images](https://github.com/dmhuehol/ASOS-Tools#code-to-replicate-example-images) 
+* [**Workflow for multiple files**](https://github.com/dmhuehol/ASOS-Tools#workflow-for-multiple-files)
+    * [Example for multiple files](https://github.com/dmhuehol/ASOS-Tools#example-for-multiple-files)
 * [**Searching for weather codes**](https://github.com/dmhuehol/ASOS-Tools#searching-for-weather-codes)
 * [**Finding ASOS stations**](https://github.com/dmhuehol/ASOS-Tools#finding-asos-stations)  
     * [List of common ASOS stations](https://github.com/dmhuehol/ASOS-Tools#list-of-common-asos-stations)  
@@ -54,8 +56,8 @@ A month of ASOS data usually contains 8000-9000 observations. It's often useful 
 **dates** contains strings of all the days where the input codes occurred  
 **exactTimes** stores the exact dates and times of all observations as datestrings  
 **exactDatenums** stores the exact dates and times of all observations as datenums  
-Note that **weatherCodeSearch** DOES work on the composite structures created by **ASOSimportManyFiveMin**. For example, for a composite structure u with data from stations KISP and KHWV, one could use the following command to find all snow observations from KISP in the structure:  
-[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',u.KISP)
+Note that **weatherCodeSearch** DOES work on the composite structures created by **ASOSimportManyFiveMin**. For example, for a composite structure pComposite with data from stations KISP and KHWV, one could use the following command to find all snow observations from KISP in the structure:  
+[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)
  
  # Finding ASOS Stations
  There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Some common ASOS stations used by our Environment Analytics group are listed below.
