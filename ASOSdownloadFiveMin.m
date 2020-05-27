@@ -21,8 +21,8 @@
     %Note: if function is failing for no apparent cause, it is likely an NCEI server problem.
     %Wait some time and try again, or try a different email address.
     %
-    %Version Date: 5/26/2020
-    %Last major revision: 5/26/2020
+    %Version Date: 5/27/2020
+    %Last major revision: 5/27/2020
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
@@ -65,8 +65,8 @@ fileExtension = '.dat';
 % If year of data is requested, double-check with the user
 if allMonths==1
     wholeYearMessageFirst = 'Download all data from ';
-    yearString = num2str(year);
-    wholeYearMessageBegin = [wholeYearMessageFirst,yearString];
+    yrStrForMsg = num2str(year);
+    wholeYearMessageBegin = [wholeYearMessageFirst,yrStrForMsg];
     wholeYearMessageEnd = '? [Y/N]';
     wholeYearMessage = strcat(wholeYearMessageBegin,wholeYearMessageEnd,space);
     YN = input(wholeYearMessage);
