@@ -44,8 +44,8 @@
     %Links to useful ASOS documentation can be found in the
     %EnvAn-WN-Phase-2 repository readme on github user page @dmhuehol.
     %
-    %Version date: 2/28/2020
-    %Last major revision: 2/28/2020
+    %Version date: 5/26/2020
+    %Last major revision: 5/26/2020
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University
@@ -63,19 +63,29 @@ for stCheck = 1:length(stations)
     diffStations(stCheck).files = filelist(logStations==1); %Each structure entry contains the files for a given station
 end
 
-
 %% Import data
-for all = 1:length(diffStations) %Splits different stations into different fields of the master structure
-    [usefulStruct,ASOSstruct] = ASOSimportFiveMin(filelist{all});
+for cSt = 1:length(diffStations) %Splits different stations into different fields of the master structure
+    noOvrwrt = 1;
+    sortedActiveFiles = sort(diffStations(cSt).files);
+    for cDiffSt = 1:length(sortedActiveFiles)
+        disp(['Current file: ' sortedActiveFiles{cDiffSt}])
+        % Unfortunately, since ASOSimportFiveMin only reads individual
+        % files there doesn't seem to be an immediately obvious way around
+        % using loops to feed the importer files one at a time.
+        % 
+        [usefulStruct{noOvrwrt},ASOSstruct{noOvrwrt}] = ASOSimportFiveMin(sortedActiveFiles{cDiffSt});
+        noOvrwrt = noOvrwrt+1;
+    end
+        
     
     %% Create output structures
-    usefulMasterStruct.(stations{all}) = usefulStruct;
-    ASOSmasterStruct.(stations{all}) = ASOSstruct;
+    usefulMasterStruct.(stations{cSt}) = cell2mat(usefulStruct);
+    ASOSmasterStruct.(stations{cSt}) = cell2mat(ASOSstruct);
     
     %Blank the variables that will be reused in the next loop, otherwise
     %data may be repeated in the output structures
-    usefulStruct = struct([]); %#ok (complaining about the variable "not being used")
-    ASOSstruct = struct([]); %#ok (complaining about the variable "not being used")
+    usefulStruct = struct([]);
+    ASOSstruct = struct([]);
     
 end
 
