@@ -33,8 +33,8 @@
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version date: 2/28/2020
-    %Last major revision: 2/28/2020
+    %Version date: 5/27/2020
+    %Last major revision: 5/27/2020
     %
     %tlabel written by Carlos Adrian Vargas Aguilera, last updated 9/2009,
         %found on the MATLAB File Exchange
@@ -59,6 +59,13 @@ if ~isequal(startDatetime.Second,0) || ~isequal(endDatetime.Second,0)
 else
     disp(['Start time is: ' datestr(startDatetime)])
     disp(['End time is: ' datestr(endDatetime)])
+end
+
+if mod(startDatetime.Minute,5) ~= 0 || mod(endDatetime.Minute,5) ~=0
+    minuteWarning = 'Observations available at five-minute intervals only. Flooring minute to nearest 5.';
+    warning(minuteWarning)
+    startDatetime.Minute = 5*floor(startDatetime.Minute./5);
+    endDatetime.Minute = 5*floor(endDatetime.Minute./5);
 end
 
 %% Locate the requested data
