@@ -16,8 +16,9 @@
         * [Front Range](https://github.com/dmhuehol/ASOS-Tools#front-range)  
         * [Utah](https://github.com/dmhuehol/ASOS-Tools#utah)        
 * [**ASOS documentation**](https://github.com/dmhuehol/ASOS-Tools#asos-documentation)  
-* [**Problems**](https://github.com/dmhuehol/ASOS-Tools#resolving-problems)
+* [**Resolving common problems**](https://github.com/dmhuehol/ASOS-Tools#resolving-problems)
     * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](https://github.com/dmhuehol/ASOS-Tools#i-downloaded-data-then-cleared-my-workspaceclosed-matlab-and-lost-all-the-filenames)  
+    * [Connection/FTP errors when running ASOSdownloadFiveMin](https://github.com/dmhuehol/ASOS-Tools#error-using-connect-error-in-ftp-when-running-asosdownloadfivemin)
 * [**Sources and Credit**](https://github.com/dmhuehol/ASOS-Tools#sources-and-credit)
  
  ## Workflow for individual files
