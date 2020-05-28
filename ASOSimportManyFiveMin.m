@@ -7,31 +7,36 @@
     %off as their own structures.
     %
     %General form:
-    %   [usefulStruct,ASOSstruct] = ASOSimportManyFiveMin(filelist,stations)
+    %   [usefulCompositeStruct,fullCompositeStruct] = ASOSimportManyFiveMin(filelist,stations)
     %
     %Outputs:
-    %usefulMasterStruct: structure containing entries for year, month, day, hour,
-    %   minute, variable wind, wind direction, wind speed, wind character,
-    %   wind character speed, minimum variable direction, maximum variable
-    %   direction, present weather, temperature, dewpoint, altimeter setting,
-    %   relative humidity, visibility, sky condition, and station ID. (Times are
-    %   recorded in UTC.)
-    %ASOSmasterStruct: structure containing all possible ASOS entries--all
-    %   entries from above, plus an extra station ID, record length,
-    %   day/month/year, local HH:MM:SS, observation frequency, another station ID, Zulu
-    %   time, observation type, slash field (divider), unknown data field, another
-    %   unknown data field, another unknown data field, magnetic wind,
-    %   magnetic variable wind, and remarks.
+    %usefulStruct: structure containing substructures for each
+    %   station. Each substructure contains the most useful data
+    %   for that station: station ID, year, month, day, hour, minute,
+    %   datetime, variable wind, wind direction, wind speed, wind
+    %   character, wind character speed, minimum variable direction,
+    %   maximum variable direction, present weather code, temperature,
+    %   dewpoint, altimeter, relative humidity, visibility, sky condition.
+    %   (Times are recorded in UTC.)
+    %ASOSstruct: structure containing substructures for each station. Each
+    %   substructure contains all possible ASOS entries--all from above,
+    %   plus extra ID, record length, day/month/year, HH:MM:SS, observation
+    %   frequency, another station ID, Zulu time, observation type, slash
+    %   field (divider), unknown data field, another unknown data field,
+    %   another unknown data field, magnetic wind, magnetic variable wind,
+    %   and remarks.
     %
     %Inputs:
     %filelist: cell array list of names referring to ASOS five minute data files.
-    %stations: cell array list of all station codes that have files in the file list.
+    %stations: cell array list of all station codes that have files in the
+    %   file list. This MUST be input as a cell array even if there is only
+    %   one station.
     %
     %To download an ASOS data file from the NCDC FTP server
     %using MATLAB, see ASOSdownloadFiveMin. To download an ASOS data file
     %by hand, go to:
     %   ftp://ftp.ncdc.noaa.gov/pub/data/asos-fivemin/
-    %(link active as of 5/26/2020)
+    %(link active as of 5/27/2020)
     %
     %If you are attempting to import only a single month from a single site,
     %use ASOSimportFiveMin instead.
@@ -41,11 +46,8 @@
     %before the expression variable is defined.
     %
     %
-    %Links to useful ASOS documentation can be found in the
-    %EnvAn-WN-Phase-2 repository readme on github user page @dmhuehol.
-    %
-    %Version date: 5/26/2020
-    %Last major revision: 5/26/2020
+    %Version date: 5/27/2020
+    %Last major revision: 5/27/2020
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University
@@ -70,10 +72,10 @@ for cSt = 1:length(diffStations) %Splits different stations into different field
     for cDiffSt = 1:length(sortedActiveFiles)
         disp(['Current file: ' sortedActiveFiles{cDiffSt}])
         % Unfortunately, since ASOSimportFiveMin only reads individual
-        % files there doesn't seem to be an immediately obvious way around
-        % using loops to feed the importer files one at a time.
+        % files there isn't an immediately obvious way around using a loop
+        % to feed the importer these files one at a time.
         % 
-        [usefulStruct{noOvrwrt},ASOSstruct{noOvrwrt}] = ASOSimportFiveMin(sortedActiveFiles{cDiffSt});
+        [usefulStruct{noOvrwrt},ASOSstruct{noOvrwrt}] = ASOSimportFiveMin(sortedActiveFiles{cDiffSt}); %#ok preallocation actually slows this down
         noOvrwrt = noOvrwrt+1;
     end
         
