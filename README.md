@@ -49,7 +49,7 @@ This example downloads and imports all data from March through May for the years
 2. [pComposite,fComposite] = **ASOSimportManyFiveMin**(downloadedFilenames,{'KISP','KHWV','KFRG'})  
 
 To plot data from 1200-1500 24 March 2018 at KHWV from this structure:  
-3. startDatetime = **datetime**(2018,3,24,12,0,0); endDatetime = **datetime**(2018,3,24,15,0,0);
+3. startDatetime = **datetime**(2018,3,24,12,0,0); endDatetime = **datetime**(2018,3,24,15,0,0);  
 4. [subset] = **surfacePlotter**(startDatetime,endDatetime,pComposite.KHWV)
 
 ## Searching for weather codes
