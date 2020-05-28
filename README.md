@@ -35,7 +35,7 @@ The second type of figure is an abacus plot that displays precipitation type, as
 ### Code to replicate example images
 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,'KRDU',2018,12,path)
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
-3. startDatetime = **datetime**(2018,12,9,0,0); endDatetime = **datetime**(2018,12,21,0,0);
+3. startDatetime = **datetime**(2018,12,9,9,0,0); endDatetime = **datetime**(2018,12,9,22,0,0);
 4. [winterStormEx] = **surfacePlotter**(startDatetime,endDatetime,krdu_1218)
 
 ## Workflow for multiple files
