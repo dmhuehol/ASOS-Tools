@@ -92,7 +92,6 @@ end
 fiveMinPath = '/pub/data/asos-fivemin/'; %Path to five minute data on FTP server
 for y_c = length(year):-1:1
     yearPrefix{y_c} = strcat(obsType,dash); %ASOS data is stored by year in folders with the prefix 6401-. For example, 2015 data is stored in the folder 6401-2015.
-    %yearString = num2str(year);
     yearDirString{y_c} = strcat(yearPrefix{y_c},yearString{y_c}); %Creates the year directory string by concatenating the prefix and the input year
     yearPath{y_c} = strcat(fiveMinPath,yearDirString{y_c}); %This is the path for the input year
     for st_c = length(station):-1:1
@@ -101,6 +100,8 @@ for y_c = length(year):-1:1
         end
     end
 end
+
+% Download files using FTP
 ftpNCDC = ftp('ftp.ncdc.noaa.gov','anonymous',emailAddress); %Opens an FTP connection to the NCDC server
 cd(ftpNCDC,fiveMinPath); %Changes folder to the ASOS five minute data
 for y_c = length(year):-1:1
