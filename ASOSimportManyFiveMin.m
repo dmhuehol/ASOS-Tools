@@ -3,8 +3,7 @@
     %from a list of filenames. Outputs up to two master structures--one with
     %only the most useful variables, and one with all variables supplied by
     %ASOS--which in turn contain other structures referring to data from different stations as
-    %subfields. Multiple months are concatenated into the subfields, not split
-    %off as their own structures.
+    %substructures. Multiple months are concatenated into the substructures.
     %
     %General form:
     %   [usefulCompositeStruct,fullCompositeStruct] = ASOSimportManyFiveMin(filelist,stations)
