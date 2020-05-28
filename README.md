@@ -113,7 +113,7 @@ This tends to happen when one makes a large number of requests in a very short s
 
 ## Sources and Credit
 
-Unless otherwise specified, code and documentation, was written and is maintained by Daniel Hueholt under the advisement of Dr. Sandra Yuter at North Carolina State University.  
+Unless otherwise specified, code and documentation are written and maintained by Daniel Hueholt under the advisement of Dr. Sandra Yuter at North Carolina State University.  
 [<img src="http://www.environmentanalytics.com/wp-content/uploads/2016/05/cropped-Environment_Analytics_Logo_Draft.png">](http://www.environmentanalytics.com)  
 **addaxis** written by [Harry Lee](https://www.mathworks.com/matlabcentral/profile/authors/863384-harry-lee), found on the [MATLAB File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/9016-addaxis).  
 Copyright (c) 2016, Harry Lee
