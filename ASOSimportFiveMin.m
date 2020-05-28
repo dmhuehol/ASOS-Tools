@@ -8,43 +8,42 @@
     %   [usefulStruct,ASOSstruct] = ASOSimportFiveMin(filename)
     %
     %Outputs:
-    %usefulStruct: structure containing entries for year, month, day, hour,
-    %   minute, variable wind, wind direction, wind speed, wind character,
-    %   wind character speed, minimum variable direction, maximum variable
-    %   direction, present weather, temperature, dewpoint, altimeter setting,
-    %   relative humidity, visibility, and sky condition. (Times are
-    %   recorded in UTC.)
+    %usefulStruct: structure containing entries for station ID, year, month
+    %   day, hour, minute, datetime, variable wind, wind direction, wind
+    %   speed, wind character, wind character speed, minimum variable
+    %   direction, maximum variable direction, present weather code,
+    %   temperature, dewpoint, altimeter, relative humidity, visibility, sky
+    %   condition. (Times are recorded in UTC.)
     %ASOSstruct: structure containing all possible ASOS entries--all
-    %   entries from above, plus station ID, extra ID, record length,
-    %   day/month/year, HH:MM:SS, observation frequency, another station ID, Zulu
-    %   time, observation type, slash field (divider), unknown data field, another
+    %   entries from above, plus extra ID, record length, day/month/year,
+    %   HH:MM:SS, observation frequency, another station ID, Zulu time,
+    %   observation type, slash field (divider), unknown data field, another
     %   unknown data field, another unknown data field, magnetic wind,
     %   magnetic variable wind, and remarks.
     %
     %Inputs:
     %filename: path and file name of an ASOS five-minute data file.
     %
-    %To easily browse the structure created by this function, see
-    %ASOSgrabber. To download an ASOS data file from the NCDC FTP server
+    %To download an ASOS data file from the NCEI FTP server
     %using MATLAB, see ASOSdownloadFiveMin. To download an ASOS data file
     %by hand, go to:
     %   ftp://ftp.ncdc.noaa.gov/pub/data/asos-fivemin/
-    %(link active as of 6/07/2018)
+    %(link active as of 5/27/2020)
     %
     %When a regular expression is used, the raw expression formatted for
     %troubleshooting on regexr.com can be found commented out in the line
     %before the expression variable is defined.
     %
-    %Links to useful ASOS documentation can be found in the
-    %EnvAn-WN-Phase-2 repository readme on github user page @dmhuehol.
+    %Links to useful ASOS documentation can be found in the repo readme for
+    %"ASOS-Tools" on github @dmhuehol.
     %
-    %Version date: 2/28/2020
+    %Version date: 5/27/2020
     %Last major revision: 2/28/2020
     %Written by: Daniel Hueholt
     %Undergraduate Research Assistant at Environment Analytics
     %North Carolina State University
     %
-    %See also ASOSdownloadFiveMin, ASOSgrabber
+    %See also ASOSdownloadFiveMin
     %
 
 function [usefulStruct,ASOSstruct] = ASOSimportFiveMin(filename)
@@ -68,8 +67,8 @@ variableWindExp = '(?<MinimumWindDirection>\d{3})(V)(?<MaximumWindDirection>\d{3
 errorCount = 0;
 missingCount = 0;
 errorThreshold = length(ASOSstruct)*0.08; %Unacceptable threshold for errors (8% of data); don't mess with this unless you have a REALLY good reason
-for count = length(ASOSstruct):-1:1 %Backwards so the entire structure is built in the first step and is then merely filled with data as the loop progresses (saves time)
-    try %Prevents a small number of errors from choking the function
+for count = length(ASOSstruct):-1:1 %Entire structure is built in the first step and propagated with data as the loop progresses (saves time)
+    try %Prevents a small number of errors from breaking the function
         wind(count) = regexp(ASOSstruct(count).Wind,windExp,'names'); %Read wind data using the wind expression
         try %Split the variable wind group into minimum wind direction and maximum wind direction
             variableWind(count) = regexp(ASOSstruct(count).VariableWind,variableWindExp,'names');
@@ -78,7 +77,7 @@ for count = length(ASOSstruct):-1:1 %Backwards so the entire structure is built 
             variableWind(count).MaximumWindDirection = ''; %blank
             continue %move on
         end
-    catch ME; %#ok %If the regular expression fails, then wind data was not recorded for this time. Thus, we manually fill in the missing data the same way that missing data is usually filled in automatically
+    catch ME; %#ok %If the regular expression fails, then wind data was not recorded for this time. Thus, we manually fill in the missing data the same way missing data is usually filled in automatically
         wind(count).Variable = 'M'; %M for murder (actually for missing)
         wind(count).WindDirection = ''; %blank
         wind(count).WindSpeed = ''; %blank
@@ -97,12 +96,17 @@ end
 if missingCount>errorThreshold %If the error count is greater than the maximum acceptable threshold
     percentError = missingCount/length(ASOSstruct)*100;
     stringError = num2str(percentError);
-    disp(['WARNING: Wind data was not recorded for ' stringError '% of data entries!']); %warn the user
+    disp(['NOTE: Wind data was not recorded for ' stringError '% of data entries!']); %warn the user
 else
     %do nothing
 end
 
 for count = length(ASOSstruct):-1:1
+    % Note: the functions used for string to number conversions in this
+    % section were chosen through experience--be very, very careful before
+    % changing any of these. Yes, sscanf is the fastest method of string to
+    % number conversion, but it's only safe to use on strings that are
+    % formatted exactly consistently.
     usefulStruct(count).StationID = ASOSstruct(1).FurtherID;
     usefulStruct(count).Year = sscanf(ASOSstruct(count).Year,'%4f'); %sscanf is fastest way to convert from string to number
     usefulStruct(count).Month = sscanf(ASOSstruct(count).Month,'%f');
