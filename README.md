@@ -44,11 +44,9 @@ The second type of figure is an abacus plot that displays precipitation type, as
 The composite structures contain substructures corresponding to each station, accessible with dot notation. The other functions like **surfacePlotter** and **weatherCodeSearch** can be used on the substructures inside of the composite.  
 
 ### Example for multiple files
-This example downloads and imports all data from March through May for the years 2017-2019 at stations KISP, KHWV, and KFRG.
+This example downloads and imports all data from March through May for the years 2017-2019 at stations KISP, KHWV, and KFRG, then plots data from 1200-1500 24 March 2018.
 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,{'KISP','KHWV','KFRG'},2017:2019,3:5,path)
 2. [pComposite,fComposite] = **ASOSimportManyFiveMin**(downloadedFilenames,{'KISP','KHWV','KFRG'})  
-
-To plot data from 1200-1500 24 March 2018 at KHWV from this structure:  
 3. startDatetime = **datetime**(2018,3,24,12,0,0); endDatetime = **datetime**(2018,3,24,15,0,0);  
 4. [subset] = **surfacePlotter**(startDatetime,endDatetime,pComposite.KHWV)
 
