@@ -57,7 +57,7 @@ A month of ASOS data usually contains 8000-9000 observations. It's often useful 
 **dates** contains strings of all the days where the input codes occurred  
 **exactTimes** stores the exact dates and times of all observations as MATLAB datetimes  
 **exactDatenums** stores the exact dates and times of all observations as MATLAB datenums  
-Note that **weatherCodeSearch** DOES work on the composite structures created by **ASOSimportManyFiveMin**. For example, for a composite structure pComposite with data from stations KISP and KHWV, one could use the following command to find all snow observations from KISP in the structure:  
+Note that **weatherCodeSearch** does work on the composite structures created by **ASOSimportManyFiveMin**. For example, for the composite structure pComposite in the example for multiple files, use the following command to find snow observations from KISP in the structure:  
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)
  
  # Finding ASOS Stations
