@@ -18,6 +18,9 @@
     % Written by: Laura Tomkins
     % Research Assistant at Environment Analytics
     % Last updated May 2017
+    % Modified by: Daniel Hueholt
+    % Research Assistant at Environment Analytics
+    % Last updated May 2020
     %
 
 function windbarb(x,y,spd,dir,scale,width,color,barb)
