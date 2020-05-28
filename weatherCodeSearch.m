@@ -6,8 +6,8 @@
     %
     %Outputs:
     %dates: all dates where the input code was observed
-    %exactTimes: the exact dates and times where the input code was observed
-    %   in DMY HMS format (note that seconds are placeholder zeros)
+    %exactTimes: the exact MATLAB datetimes where the input code was observed
+    %   in DD-MMM-YYYY HH:mm:SS format (note seconds are placeholder zeros)
     %exactDatenums: same as exactTimes, but as MATLAB datenums (note that
     %seconds are placeholder zeros)
     %
@@ -18,14 +18,13 @@
     %   Obscuration codes: 'BR' = mist, 'FG' = fog, 'FU' = smoke, 'HZ' =
     %   haze
     %   Character codes: 'SQ' = squall
-    %   
     %ASOS: an ASOS 5-minute data structure.
     %
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 2/24/2020
-    %Last Major Revision: 2/24/2020
+    %Version Date: 5/27/2020
+    %Last Major Revision: 5/27/2020
     %
 
 function [dates,exactTimes,exactDatenums] = weatherCodeSearch(weatherCode,ASOS)
@@ -41,7 +40,7 @@ validInd = logicalWeather==1;
 
 %Useful command window message if no weather codes were found
 if isempty(nonzeros(validInd))==1
-    dates = []; exactTimes = []; %Null outputs
+    dates = []; exactTimes = []; exactDatenums = []; %Null outputs
     msg = 'No instances of this weather code could be located.';
     disp(msg)
     return %End the function
@@ -58,6 +57,6 @@ fakeSecond = zeros(length(validMinute),1); %Assume all seconds are zero entries
 validDates = datenum(validYear,validMonth,validDay);
 validDates = unique(validDates);
 dates = datestr(validDates); %Output unique days where code occurred
-exactDatenums = datenum(validYear,validMonth,validDay,validHour,validMinute,fakeSecond);
-exactTimes = datestr(exactDatenums); %Output every time where the code occurred
+exactDatenums = datenum(validYear,validMonth,validDay,validHour,validMinute,fakeSecond); %Output every datenum where the code occurred
+exactTimes = datetime(exactDatenums,'ConvertFrom','datenum'); %Output every datetime where the code occurred
 end
