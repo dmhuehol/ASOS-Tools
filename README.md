@@ -55,8 +55,8 @@ To plot data from 1200-1500 24 March 2018 at KHWV from this structure:
 A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. **weatherCodeSearch** outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command:  
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**('PL',krdu_1218)  
 **dates** contains strings of all the days where the input codes occurred  
-**exactTimes** stores the exact dates and times of all observations as datestrings  
-**exactDatenums** stores the exact dates and times of all observations as datenums  
+**exactTimes** stores the exact dates and times of all observations as MATLAB datetimes  
+**exactDatenums** stores the exact dates and times of all observations as MATLAB datenums  
 Note that **weatherCodeSearch** DOES work on the composite structures created by **ASOSimportManyFiveMin**. For example, for a composite structure pComposite with data from stations KISP and KHWV, one could use the following command to find all snow observations from KISP in the structure:  
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)
  
