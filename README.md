@@ -2,7 +2,7 @@
  Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.
  
  ## Table of Contents
-* [**Workflow for individual files**](#Workflow)  
+* [**Workflow for individual files**](#workflow-for-individual-files)  
 * [**Example images**](#example-images)  
     * [Code to replicate example images](#code-to-replicate-example-images) 
 * [**Workflow for multiple files**](#workflow-for-multiple-files)
