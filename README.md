@@ -22,7 +22,7 @@
 * [**Sources and Credit**](#sources-and-credit)
  
  ## Workflow for individual files
- 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) downloads a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
+ 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) downloads a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. Make sure to include a trailing slash in the path. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
  3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots data in the structure created in step 2.
  
@@ -34,6 +34,8 @@ The second type of figure is an abacus plot that displays precipitation type, as
 
 ### Code to replicate example images
 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(emailAddress,'KRDU',2018,12,path)
+    * emailAddress must be input as a string, e.g. ('stuff(at)that_place.edu' not stuff(at)that_place.edu)
+    * path variable requires a trailing slash, e.g. ('/Users/username/Downloads/' not '/Users/username/Downloads')
 2. [krdu_1218,~] = **ASOSimportFiveMin**(downloadedFilenames{1})
 3. startDatetime = **datetime**(2018,12,9,9,0,0); endDatetime = **datetime**(2018,12,9,22,0,0);
 4. [winterStormEx] = **surfacePlotter**(startDatetime,endDatetime,krdu_1218)
