@@ -22,7 +22,7 @@
 * [**Sources and Credit**](#sources-and-credit)
  
  ## Workflow for individual files
- 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) downloads a file from the [NCDC FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. Make sure to include a trailing slash in the path. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
+ 1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,site,year,month,path) downloads a file from the [NCEI FTP server](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/automated-surface-observing-system-asos) to the folder given by the path variable. Make sure to include a trailing slash in the path. The location of the file(s) downloaded is output as a cell array. This cell array of filenames is also saved to the same directory as the data, so it can be easily accessed after the workspace is cleared without requiring the download command to be rerun.  
  2. [primaryStruct,fullStruct] = **ASOSimportFiveMin**(filepath) imports the file at the location given by the filepath string. Creates two structures: primaryStruct contains only the important fields, while fullStruct contains every field in the file.  
  3. [subsetStruct] = **surfacePlotter**(startDatetime,endDatetime,primaryStruct) plots data in the structure created in step 2.
  
