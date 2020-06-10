@@ -16,6 +16,7 @@
         * [Front Range](#front-range)  
         * [Utah](#utah)        
 * [**ASOS documentation**](#asos-documentation)  
+* [**Table of common weather codes**](#table-of-common-weather-codes)
 * [**Resolving common problems**](#resolving-problems)
     * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](#i-downloaded-data-then-cleared-my-workspaceclosed-matlab-and-lost-all-the-filenames)  
     * [Connection/FTP errors when running ASOSdownloadFiveMin](#error-using-connect-error-in-ftp-when-running-asosdownloadfivemin)
@@ -106,6 +107,31 @@ KSLC: Salt Lake City, closest to Alta
  [**Federal Meteorological Handbook**](https://www.ofcm.gov/publications/fmh/FMH1/FMH1.pdf) defines standards for reporting surface conditions, with Table 8-5 including all of the codes used by ASOS. However, as it is designed for meteorological observers, it doesn't discuss any of the science behind the ASOS observation strategies.  
  [**TD-6401**](https://www1.ncdc.noaa.gov/pub/data/documentlibrary/tddoc/td6401.pdf) is the official dataset documentation for the ASOS 5-minute data format. However, the information for the weather codes given here is outdated; the codes described in "weather and obstructions" do not correspond to the codes in actual data.  
  These links active as of 5/27/2020.
+ 
+ # Table of common weather codes
+| Weather code | Weather type | Code class |
+| ------------ | ------------ | ---------- |
+| BR           | Mist         | Obscuration|
+| DZ           | Drizzle      | Precip     |
+| FG           | Fog          | Obscuration|
+| FZDZ         | Freezing drizzle| Precip  |
+| FZFG         | Freezing fog | Obscuration|
+| FZRA         | Freezing rain| Precip     |
+| GR           | Hail         | Precip     |
+| GS           | Graupel      | Precip     |
+| HZ           | Haze         | Obscuration|
+| IC           | Ice crystals | Precip     |
+| PL           | Ice pellets (sleet)|Precip|
+| RA           | Rain         | Precip     |
+| SG           | Graupel      | Precip     |
+| SN           | Snow         | Precip     |
+| TS           | Thunderstorm | Other      |
+| UP           | Unknown precipitation|Precip|
+
+| Modifiers    | Description  | Code class |
+| ------------ | ------------ | ---------- |
+| -            | Light precip | Precip intensity |
+| +            | Heavy precip | Precip intensity |
  
 # Resolving problems
 ### I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!
