@@ -1,5 +1,5 @@
 # ASOS Tools
- Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data.
+ Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data. Requires MATLAB 2017a+.
  
  ## Table of Contents
 * [**Workflow for individual files**](#workflow-for-individual-files)  
@@ -60,7 +60,9 @@ A month of ASOS data usually contains 8000-9000 observations. It's often useful 
 **exactTimes** stores the exact dates and times of all observations as MATLAB datetimes  
 **exactDatenums** stores the exact dates and times of all observations as MATLAB datenums  
 Note that **weatherCodeSearch** does work on the composite structures created by **ASOSimportManyFiveMin**. For example, for the composite structure pComposite in the example for multiple files, use the following command to find snow observations from KISP in the structure:  
-[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)
+[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)  
+You can also use **weatherCodeSearch** to search for multiple codes at once by inputting codes as an array of strings. For example, to search the krdu_1218 structure for all times with either rain or snow, use the following command:  
+[dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)  
  
  # Finding ASOS Stations
  There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Some common ASOS stations used by our Environment Analytics group are listed below.
