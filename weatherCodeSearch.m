@@ -1,6 +1,8 @@
 %%weatherCodeSearch
-    %Function to find dates and times that an input weather code occurred
+    %Function to find dates and times that input weather code(s) occurred
     %in an ASOS data structure.
+    %
+    %Requires MATLAB 2017a+ (uses contains function).
     %
     %General form: [dates,exactTimes,exactDatenums] = weatherCodeSearch(weatherCode,ASOS)
     %
@@ -12,34 +14,33 @@
     %seconds are placeholder zeros)
     %
     %Inputs:
-    %weatherCode: an ASOS weather code string
+    %weatherCode: an ASOS weather code string or string array. Some common
+    %codes are given below. See documentation on GitHub for complete table
+    %of precipitation codes.
     %   Precip codes: 'RA' = rain, 'SN' = snow, 'PL' = sleet, 'FZRA' =
     %   freezing rain, 'FZDZ' = freezing drizzle, 'DZ' = drizzle
     %   Obscuration codes: 'BR' = mist, 'FG' = fog, 'FU' = smoke, 'HZ' =
     %   haze
     %   Character codes: 'SQ' = squall
+    %   Multiple codes can be input as string arrays: i.e. ["RA","SN"] will
+    %   return times with either rain or snow
     %ASOS: an ASOS 5-minute data structure.
     %
     %Written by: Daniel Hueholt
     %North Carolina State University
     %Undergraduate Research Assistant at Environment Analytics
-    %Version Date: 5/27/2020
-    %Last Major Revision: 5/27/2020
+    %Version Date: 6/16/2020
+    %Last Major Revision: 6/16/2020
     %
 
 function [dates,exactTimes,exactDatenums] = weatherCodeSearch(weatherCode,ASOS)
 presentWeather = {ASOS.PresentWeather};
 
-weather = strfind(presentWeather,weatherCode);
-noWeather = cellfun('isempty',weather); %'isempty' is faster than @isempty
-weather(noWeather) = {0}; %Insert 0 into all empty cells, otherwise conversion to double removes blank entries
-weather = cell2mat(weather); %Convert to double
-logicalWeather = logical(weather); %Logically index on ~0
-%All logical 1 elements now correspond to where the weather code is detected
-validInd = logicalWeather==1;
+weather = contains(presentWeather,weatherCode);
+%All logical 1 elements now correspond to indices of weather code(s)
 
-%Useful command window message if no weather codes were found
-if isempty(nonzeros(validInd))==1
+%Display command window message if no weather codes were found
+if isempty(nonzeros(weather))==1
     dates = []; exactTimes = []; exactDatenums = []; %Null outputs
     msg = 'No instances of this weather code could be located.';
     disp(msg)
@@ -47,16 +48,16 @@ if isempty(nonzeros(validInd))==1
 end
 
 %Extract times
-validYear = [ASOS(validInd).Year]';
-validMonth = [ASOS(validInd).Month]';
-validDay = [ASOS(validInd).Day]';
-validHour = [ASOS(validInd).Hour]';
-validMinute = [ASOS(validInd).Minute]';
-fakeSecond = zeros(length(validMinute),1); %Assume all seconds are zero entries
+validYear = [ASOS(weather).Year]';
+validMonth = [ASOS(weather).Month]';
+validDay = [ASOS(weather).Day]';
+validHour = [ASOS(weather).Hour]';
+validMinute = [ASOS(weather).Minute]';
+fakeSecond = zeros(length(validMinute),1); %Add a fake seconds field (required for datetimes)
 
 validDates = datenum(validYear,validMonth,validDay);
 validDates = unique(validDates);
-dates = datestr(validDates); %Output unique days where code occurred
-exactDatenums = datenum(validYear,validMonth,validDay,validHour,validMinute,fakeSecond); %Output every datenum where the code occurred
-exactTimes = datetime(exactDatenums,'ConvertFrom','datenum'); %Output every datetime where the code occurred
+dates = datestr(validDates); %Output unique days with code(s)
+exactDatenums = datenum(validYear,validMonth,validDay,validHour,validMinute,fakeSecond); %Output every datenum with code(s)
+exactTimes = datetime(exactDatenums,'ConvertFrom','datenum'); %Output every datetime with code(s)
 end
