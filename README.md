@@ -111,6 +111,7 @@ KSLC: Salt Lake City, closest to Alta
  # Table of common weather codes
 | Weather code | Weather type | Code class |
 | ------------ | ------------ | ---------- |
+| BLSN         | Blowing snow | Unknown
 | BR           | Mist         | Obscuration|
 | DZ           | Drizzle      | Precip     |
 | FG           | Fog          | Obscuration|
