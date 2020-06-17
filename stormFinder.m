@@ -74,22 +74,28 @@ for wq = 1:length(gapInd)-1
         stormDuration = filterStorms(fc).endTime-filterStorms(fc).startTime;
         if stormDuration>hours(1)
             activeDt = [allStorms(wq).data.Datetime]';
+            activeiScore = [allStorms(wq).iScoreArr];
             activeHour = activeDt.Hour;
             allHours = unique(activeHour);
             for hq = 1:length(allHours)
                 indHour = activeHour==allHours(hq);
                 hour(hq).datetime = activeDt(indHour);
-                hour(hq).iScoreArr = iScore(indHour);
+                hour(hq).iScoreArr = activeiScore(indHour);
                 hour(hq).iScore = sum(hour(hq).iScoreArr);
             end
-            [maxScore,maxInd] = max([hour.iScore]);
+            [~,maxInd] = max([hour.iScore]);
             peakIntensity.Hour = hour(maxInd).datetime(1).Hour;
             peakIntensity.datetime = hour(maxInd).datetime;
             peakIntensity.iScoreArr = hour(maxInd).iScoreArr;
-            peakIntensity.iScore = maxScore;
+            peakIntensity.iScore = sum(peakIntensity.iScoreArr);
             filterStorms(fc).peak = peakIntensity; %#ok
             filterStorms(fc).peakHourStart = peakIntensity.datetime(1);
+        else
+            filterStorms(fc).peak = [];
+            filterStorms(fc).peakHourStart = [];
         end
+        clear activeDt; clear activeiScore; clear activeHour;
+        clear allHours; clear hour; clear indHour; clear peakIntensity;
         fc = fc+1;
         
     end
