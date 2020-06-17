@@ -32,28 +32,36 @@
 
 
 function [storms] = stormFinder(ASOS)
-presentWeather = {ASOS.PresentWeather};
 
+% Locate data during precipitation
+presentWeather = {ASOS.PresentWeather};
 precipCode = ["SN","BLSN","PL","DZ","FZDZ","RA","FZRA","SG","GS"]; % all possible weather codes corresponding to precipitation ordered usefully
 weather = contains(presentWeather,precipCode);
-% Where weather is 1, there is at least one precip code hit
+% Where weather is 1, there is one or more precip code
 % Where weather is 0, precip is not occurring
-[~,weatherInd,~] = find(weather); % Find indices where precip occurs
+[~,weatherInd,~] = find(weather); %Find indices where precip occurs
 weatherInd = weatherInd';
 
-findGaps = diff(weatherInd); %Look for gaps in the indices where precip occurs
-gapLog = findGaps>24; %If the gap is larger than 24 indices, then it's longer than 2 hours
-[gapInd,~,~] = find(gapLog);
-weatherData = ASOS(weather);
+% Find storm gap indices
+% 2-hour gap in weather codes denotes 2-hour break in precipitation
+findGaps = diff(weatherInd); %Look for gaps in the indices
+gapLog = findGaps>24; %24 indices * 5 minutes = 120 minutes
+[gapInd,~,~] = find(gapLog); %Find indices where gaps occur
 
-codesOnly = {weatherData.PresentWeather};
-heavy = contains(codesOnly,'+');
-light = contains(codesOnly,'-');
+% Extract relevant data
+weatherData = ASOS(weather); %ASOS data where precip occurred
+codesOnly = {weatherData.PresentWeather}; %Weather codes where precip occurred
+% These need to be split by the gaps in gapInd
+
+% Set up intensity score
+heavy = contains(codesOnly,'+'); %+ => 3
+light = contains(codesOnly,'-');%- => 1
 [~,heavyInd,~] = find(heavy);
 [~,lightInd,~] = find(light);
-iScore = ones(length(codesOnly),1)*2;
+iScore = ones(length(codesOnly),1)*2; %Regular weather codes => 2
 iScore(heavyInd) = 3;
 iScore(lightInd) = 1;
+%%Above this should be safe
 
 fc = 1;
 for wq = 1:length(gapInd)-1
