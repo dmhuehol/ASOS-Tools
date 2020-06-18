@@ -102,7 +102,7 @@ for wq = 1:length(gapInd)-1
             peakIntensity.datetime = hour(maxInd).datetime;
             peakIntensity.iScoreArr = hour(maxInd).iScoreArr;
             peakIntensity.iScore = sum(peakIntensity.iScoreArr);
-            filterStorms(fc).peak = peakIntensity; %#ok
+            filterStorms(fc).peak = peakIntensity;
             filterStorms(fc).peakHourStart = peakIntensity.datetime(1);
         else
             filterStorms(fc).peak = [];
