@@ -64,20 +64,26 @@ iScore(lightInd) = 1;
 %%Above this should be safe
 
 fc = 1;
+allStorms = struct([]);
+filterStorms = struct([]);
 for wq = 1:length(gapInd)-1
-    allStorms(wq).data = weatherData(gapInd(wq)+1:gapInd(wq+1)-1); %#ok
-    allStorms(wq).startTime = allStorms(wq).data(1).Datetime; %#ok
-    allStorms(wq).endTime = allStorms(wq).data(end).Datetime; %#ok
-    allStorms(wq).iScoreArr = iScore(gapInd(wq)+1:gapInd(wq+1)-1); %#ok
-    iScoreScalar = sum(allStorms(wq).iScoreArr);
-    allStorms(wq).iScore = iScoreScalar; %#ok
+    allStorms(wq).data = weatherData(gapInd(wq)+1:gapInd(wq+1)-1);
+    if ~isempty(allStorms(wq).data)
+        allStorms(wq).startTime = allStorms(wq).data(1).Datetime;
+        allStorms(wq).endTime = allStorms(wq).data(end).Datetime;
+        allStorms(wq).iScoreArr = iScore(gapInd(wq)+1:gapInd(wq+1)-1);
+        iScoreScalar = sum(allStorms(wq).iScoreArr);
+        allStorms(wq).iScore = iScoreScalar;
+    else
+        continue
+    end
     
     if iScoreScalar > 15
-        filterStorms(fc).data = allStorms(wq).data; %#ok
-        filterStorms(fc).startTime = allStorms(wq).startTime; %#ok
-        filterStorms(fc).endTime = allStorms(wq).endTime; %#ok
-        filterStorms(fc).iScoreArr = allStorms(wq).iScoreArr; %#ok
-        filterStorms(fc).iScore = iScoreScalar; %#ok
+        filterStorms(fc).data = allStorms(wq).data;
+        filterStorms(fc).startTime = allStorms(wq).startTime;
+        filterStorms(fc).endTime = allStorms(wq).endTime;
+        filterStorms(fc).iScoreArr = allStorms(wq).iScoreArr;
+        filterStorms(fc).iScore = iScoreScalar;
         
         stormDuration = filterStorms(fc).endTime-filterStorms(fc).startTime;
         if stormDuration>hours(1)
