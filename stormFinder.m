@@ -45,8 +45,12 @@ weatherInd = weatherInd';
 % Find storm gap indices
 % 2-hour gap in weather codes denotes 2-hour break in precipitation
 findGaps = diff(weatherInd); %Look for gaps in the indices
-gapLog = findGaps>24; %24 indices * 5 minutes = 120 minutes
+gapLog = findGaps>24; %24 indices * 5 minutes per index = 120 minutes
 [gapInd,~,~] = find(gapLog); %Find indices where gaps occur
+if findGaps(end)==1
+    fixLastGap = length(weatherInd);
+    gapInd = vertcat(gapInd,fixLastGap);
+end
 
 % Extract relevant data
 weatherData = ASOS(weather); %ASOS data where precip occurred
@@ -114,6 +118,12 @@ for wq = 1:length(gapInd)-1
         
     end
     
+end
+
+for qq = 1:fc-1
+    filterStorms(qq).startTime = datestr(filterStorms(qq).startTime);
+    filterStorms(qq).endTime = datestr(filterStorms(qq).endTime);
+    filterStorms(qq).peakHourStart = datestr(filterStorms(qq).peakHourStart);
 end
 
 % Make final output structure
