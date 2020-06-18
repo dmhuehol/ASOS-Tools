@@ -65,7 +65,6 @@ light = contains(codesOnly,'-');%- => 1
 iScore = ones(length(codesOnly),1)*2; %Regular weather codes => 2
 iScore(heavyInd) = 3;
 iScore(lightInd) = 1;
-%%Above this should be safe
 
 fc = 1;
 allStorms = struct([]);
@@ -120,11 +119,12 @@ for wq = 1:length(gapInd)-1
     
 end
 
-for qq = 1:fc-1
-    filterStorms(qq).startTime = datestr(filterStorms(qq).startTime);
-    filterStorms(qq).endTime = datestr(filterStorms(qq).endTime);
-    filterStorms(qq).peakHourStart = datestr(filterStorms(qq).peakHourStart);
-end
+% Uncomment for datestrings instead of datetimes
+% for qq = 1:fc-1
+%     filterStorms(qq).startTime = datestr(filterStorms(qq).startTime);
+%     filterStorms(qq).endTime = datestr(filterStorms(qq).endTime);
+%     filterStorms(qq).peakHourStart = datestr(filterStorms(qq).peakHourStart);
+% end
 
 % Make final output structure
 storms.all = allStorms;
