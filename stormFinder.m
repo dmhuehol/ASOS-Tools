@@ -26,34 +26,44 @@
 %   Written by: Daniel Hueholt
 %   North Carolina State University
 %   Research Assistant at Environment Analytics
-%   Version Date: 6/16/2020
-%   Last Major Revision: 6/16/2020
+%   Version date: 6/19/2020
+%   Last major revision: 6/19/2020
 %
 
 
 function [storms] = stormFinder(ASOS)
 
-% Locate data during precipitation
 presentWeather = {ASOS.PresentWeather};
+
+% Remove solo BLSN codes, which can throw off storm start/end time
+blowSnowCode = "BLSN";
+[codeLength] = cellfun('length',presentWeather);
+codeLength5 = codeLength == 5; %Length 5=>"BLSN " only
+blowSnow = and(contains(presentWeather,blowSnowCode),codeLength5); % Learned this trick from Megan Amanatides's original balloon import code
+[~,blowSnowInd,~] = find(blowSnow);
+presentWeatherNoBLSN = presentWeather;
+presentWeatherNoBLSN(blowSnowInd) = {' '};
+
+% Locate data during precipitation
 precipCode = ["SN","BLSN","PL","DZ","FZDZ","RA","FZRA","SG","GS"]; % all possible weather codes corresponding to precipitation ordered usefully
-weather = contains(presentWeather,precipCode);
+precip = contains(presentWeatherNoBLSN,precipCode);
 % Where weather is 1, there is one or more precip code
 % Where weather is 0, precip is not occurring
-[~,weatherInd,~] = find(weather); %Find indices where precip occurs
-weatherInd = weatherInd';
+[~,precipInd,~] = find(precip); %Find indices where precip occurs
+precipInd = precipInd';
 
 % Find storm gap indices
 % 2-hour gap in weather codes denotes 2-hour break in precipitation
-findGaps = diff(weatherInd); %Look for gaps in the indices
+findGaps = diff(precipInd); %Look for gaps in the indices
 gapLog = findGaps>24; %24 indices * 5 minutes per index = 120 minutes
 [gapInd,~,~] = find(gapLog); %Find indices where gaps occur
 if findGaps(end)==1
-    fixLastGap = length(weatherInd);
+    fixLastGap = length(precipInd);
     gapInd = vertcat(gapInd,fixLastGap);
 end
 
 % Extract relevant data
-weatherData = ASOS(weather); %ASOS data where precip occurred
+weatherData = ASOS(precip); %ASOS data where precip occurred
 codesOnly = {weatherData.PresentWeather}; %Weather codes where precip occurred
 % These need to be split by the gaps in gapInd
 
@@ -120,11 +130,13 @@ for wq = 1:length(gapInd)-1
 end
 
 % Uncomment for datestrings instead of datetimes
-% for qq = 1:fc-1
-%     filterStorms(qq).startTime = datestr(filterStorms(qq).startTime);
-%     filterStorms(qq).endTime = datestr(filterStorms(qq).endTime);
-%     filterStorms(qq).peakHourStart = datestr(filterStorms(qq).peakHourStart);
-% end
+% (Datetimes are more flexible for coding but datestrings are easier to
+% assess visually from the workspace.)
+for qq = 1:fc-1
+     filterStorms(qq).startTime = datestr(filterStorms(qq).startTime);
+     filterStorms(qq).endTime = datestr(filterStorms(qq).endTime);
+     filterStorms(qq).peakHourStart = datestr(filterStorms(qq).peakHourStart);
+end
 
 % Make final output structure
 storms.all = allStorms;
