@@ -64,7 +64,7 @@ Note that **weatherCodeSearch** does work on the composite structures created by
 You can also use **weatherCodeSearch** to search for multiple codes at once by inputting codes as an array of strings. For example, to search the krdu_1218 structure for all times with either rain or snow, use the following command:  
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)  
 
-## Extracting storms from a structure of ASOS data
+## Extracting storms from ASOS data
 **stormFinder** is designed to extract the start time, end time, and the hour of peak intensity (for storms of sufficient duration) for all storms within a structure of ASOS data. This is particularly useful when run on multiple seasons of data. The start time is the time of the first precipitation code detected. The end time is the time of the last precipitation code before a gap greater than 2 hours.  
 ASOS 5-minute data does not include rain measurement or snow water equivalent. Thus, the peak intensity is approximated using the weather codes. The ASOS weather codes include a +/- signifier for heavy/light precipitation. We assign the different weather codes a numerical intensity score based on this signifier, and sum this score by hour while a storm is happening. The hour with the highest intensity score is designated the hour of peak precipitation intensity. This metric is untested, but should correspond qualitatively to the period of peak precipitation intensity at the surface.  
 The following example shows how to identify storms in the krdu_1218 structure:  
