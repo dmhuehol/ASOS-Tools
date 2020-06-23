@@ -63,6 +63,24 @@ Note that **weatherCodeSearch** does work on the composite structures created by
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)  
 You can also use **weatherCodeSearch** to search for multiple codes at once by inputting codes as an array of strings. For example, to search the krdu_1218 structure for all times with either rain or snow, use the following command:  
 [dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)  
+
+## Extracting storms from a structure of ASOS data
+**stormFinder** is designed to extract the start time, end time, and the hour of peak intensity (for storms of sufficient duration) for all storms within a structure of ASOS data. This is particularly useful when run on multiple seasons of data. The start time is the time of the first precipitation code detected. The end time is the time of the last precipitation code before a gap greater than 2 hours.  
+ASOS 5-minute data does not include rain measurement or snow water equivalent. Thus, the peak intensity is approximated using the weather codes. The ASOS weather codes include a +/- signifier for heavy/light precipitation. We assign the different weather codes a numerical intensity score based on this signifier, and sum this score by hour while a storm is happening. The hour with the highest intensity score is designated the hour of peak precipitation intensity. This metric is untested, but should correspond qualitatively to the period of peak precipitation intensity at the surface.  
+The following example shows how to identify storms in the krdu_1218 structure:  
+[storms] = **stormFinder**(krdu_1218)  
+The storms structure contains two substructures. One is named **all**, which contains all storms identified. The other is named **filtered**, and restricts the storms to those with an intensity score above 15. This removes trace events. Hours of peak intensity are only calculated for the storms in the filtered substructure.
+
+### Workflow for identifying storms corresponding to the NEUS archive
+Environment Analytics has an archive of [100+ significant winter storms in the northeastern US](http://www.environmentanalytics.com/neus/). This archive was created as part of Nicole Hoban's master's thesis in 2016, with Spencer Rhodes, Dr. Sandra Yuter, and Michael Tai Bryant also participating in the creation of this webpage. This example shows how to identify storms at KLGA corresponding to these events. The storms do not perfectly match up--some storms in the archive miss KLGA, the surface air may be too dry for precipitation to reach the surface, ASOS stations occasionally lose power, etc. Overall, though, the correspondence is quite good.
+1. [downloadedFilenames] = **ASOSdownloadFiveMin**(email,{'KLGA'},2001:2016,[1,2,3,11,12],path)
+2. [pLGA_neusArchive,~] = **ASOSimportManyFiveMin**(downloadedFilenames,{'KLGA'})
+3. [storms] = **stormFinder**(pLGA_neusArchive.KLGA)  
+
+## Exploring very large ASOS structures
+Structures containing several months of data can be a challenge to explore, particularly on older computers where MATLAB struggles to display large structures in the workspace. **extract500Ind** is designed to output a useful subset of the structure consisting of 500 indices after an input datetime. The following example demonstrates extracting a subset of interest from the pLGA_neusArchive structure (described above) corresponding to February 16, 2013.  
+1. [dtExtract] = **datetime**(2013,2,16,0,0,0)
+2. [subset] = **extract500Ind**(dtExtract,pLGA_neusArchive.KLGA)
  
  # Finding ASOS Stations
  There are many, many ASOS stations around the US, and finding the best one(s) for one's purposes can be difficult. The Federal Aviation Administration keeps [a zoomable map](https://www.faa.gov/air_traffic/weather/asos/) of ASOS/AWOS stations by state. Note that only ASOS 5-minute stations, denoted by gray placemarks on this map, are supported by the code in this repository. Some common ASOS stations used by our Environment Analytics group are listed below.
