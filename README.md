@@ -57,17 +57,21 @@ This example downloads and imports all data from March through May for the years
 4. `[subset] = surfacePlotter(startDatetime,endDatetime,pComposite.KHWV)`
 
 ## Searching for weather codes
-A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. `weatherCodeSearch` outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command: ```[dates,exactTimes,exactDatenums] = weatherCodeSearch('PL',krdu_1218)```  
+A month of ASOS data usually contains 8000-9000 observations. It's often useful to be able to search these structures for a given weather code. `weatherCodeSearch` outputs a list of times corresponding to all observations of a given weather code. For example, to locate all times where ice pellets were detected in the krdu_1218 structure from the example above, use the following command.  
+```[dates,exactTimes,exactDatenums] = weatherCodeSearch('PL',krdu_1218)```  
 `dates` contains strings of all the days where the input codes occurred  
 `exactTimes` stores the exact dates and times of all observations as MATLAB datetimes  
 `exactDatenums` stores the exact dates and times of all observations as MATLAB datenums  
-Note that `weatherCodeSearch` does work on the composite structures created by `ASOSimportManyFiveMin`. For example, for the composite structure `pComposite` in the example for multiple files, use the following command to find snow observations from KISP in the structure. ```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)```  
-You can also use `weatherCodeSearch` to search for multiple codes at once by inputting codes as an array of strings. For example, to search the `krdu_1218` structure for all times with either rain or snow, use the following command. ```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)```
+Note that `weatherCodeSearch` does work on the composite structures created by `ASOSimportManyFiveMin`. For example, for the composite structure `pComposite` in the example for multiple files, use the following command to find snow observations from KISP in the structure.  
+```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)```  
+You can also use `weatherCodeSearch` to search for multiple codes at once by inputting codes as an array of strings. For example, to search the `krdu_1218` structure for all times with either rain or snow, use the following command.  
+```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)```
 
 ## Extracting storms from ASOS data
 `stormFinder` is designed to extract the start time, end time, and the hour of peak intensity (for storms of sufficient duration) for all storms within a structure of ASOS data. This is particularly useful when run on multiple seasons of data. The start time is the time of the first precipitation code detected. The end time is the time of the last precipitation code before a gap greater than 2 hours.  
 ASOS 5-minute data does not include rain measurement or snow water equivalent. Thus, the peak intensity is approximated using the weather codes. The ASOS weather codes include a +/- signifier for heavy/light precipitation. We assign the different weather codes a numerical intensity score based on this signifier, and sum this score by hour while a storm is happening. The hour with the highest intensity score is designated the hour of peak precipitation intensity. This metric is untested, but should correspond qualitatively to the period of peak precipitation intensity at the surface.  
-The following example shows how to identify storms in the `krdu_1218` structure. ```[storms] = **stormFinder**(krdu_1218)```  
+The following example shows how to identify storms in the `krdu_1218` structure.  
+```[storms] = **stormFinder**(krdu_1218)```  
 The storms structure contains two substructures. One is named `all`, which contains all storms identified. The other is named `filtered`, and restricts the storms to those with an intensity score above 15. This removes trace events. Hours of peak intensity are only calculated for the storms in the filtered substructure.
 
 ### Workflow for identifying storms corresponding to the NEUS archive
