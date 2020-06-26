@@ -37,9 +37,9 @@ The second type of figure is an abacus plot that displays precipitation type, as
 ![Example abacus plot](images/ex_abacus_raleigh_20181209.png)
 
 ### Code to replicate example images
-1. `[downloadedFilenames] = ASOSdownloadFiveMin(emailAddress,'KRDU',2018,12,path)`
-    * emailAddress must be input as a string, e.g. ('stuff(at)that_place.edu' not stuff(at)that_place.edu)
-    * path variable requires a trailing slash, e.g. ('/Users/username/Downloads/' not '/Users/username/Downloads')
+1. `[downloadedFilenames] = ASOSdownloadFiveMin(emailAddress,'KRDU',2018,12,downloadToPath)`
+    * `emailAddress` must be input as a string, e.g. ('stuff(at)that_place.edu' not stuff(at)that_place.edu)
+    * `downloadToPath` variable requires a trailing slash, e.g. ('/Users/username/Downloads/' not '/Users/username/Downloads')
 2. `[krdu_1218,~] = ASOSimportFiveMin(downloadedFilenames{1})`
 3. `startDatetime = datetime(2018,12,9,9,0,0);` `endDatetime = datetime(2018,12,9,22,0,0);`
 4. `[winterStormEx] = surfacePlotter(startDatetime,endDatetime,krdu_1218)`
