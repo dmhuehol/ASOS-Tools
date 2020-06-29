@@ -76,7 +76,7 @@ The storms structure contains two substructures. One is named `all`, which conta
 
 ### Workflow for identifying storms corresponding to the NEUS archive
 Environment Analytics has an archive of [100+ significant winter storms in the northeastern US](http://www.environmentanalytics.com/neus/). This archive was created as part of Nicole Hoban's master's thesis in 2016, with Spencer Rhodes, Dr. Sandra Yuter, and Michael Tai Bryant also participating in the creation of this webpage. This example shows how to identify storms at KLGA corresponding to these events. The storms do not perfectly match up--some storms in the archive miss KLGA, the surface air may be too dry for precipitation to reach the surface, ASOS stations occasionally lose power, etc. Overall, though, the correspondence is quite good.
-1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,{'KLGA'},2001:2016,[1,2,3,11,12],path)`
+1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,{'KLGA'},2001:2016,[1,2,3,11,12],downloadToPath)`
 2. `[pLGA_neusArchive,~] = ASOSimportManyFiveMin(downloadedFilenames,{'KLGA'})`
 3. `[storms] = stormFinder(pLGA_neusArchive.KLGA)`
 
