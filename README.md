@@ -45,13 +45,13 @@ The second type of figure is an abacus plot that displays precipitation type, as
 4. `[winterStormEx] = surfacePlotter(startDatetime,endDatetime,krdu_1218)`
 
 ## Workflow for multiple files
-1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,site,year,month,path)` downloads files to the folder given by the path variable. To download multiple sites, input them as a cell array. Multiple years or months can be input as arrays. The output downloadedFilenames contains all of the downloaded filenames in a 3-dimensional cell array, where D1 represents years, D2 is stations, and D3 corresponds to months.
+1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,site,year,month,downloadToPath)` downloads files to the folder given by the `downloadToPath` variable. To download multiple sites, input them as a cell array. Multiple years or months can be input as arrays. The output downloadedFilenames contains all of the downloaded filenames in a 3-dimensional cell array, where D1 represents years, D2 is stations, and D3 corresponds to months.
 2. `[primaryCompositeStruct,fullCompositeStruct] = ASOSimportManyFiveMin(downloadedFilenames,stationList)` imports the files at downloadedFilenames corresponding to the stations input as a cell array in stationList.  
 The composite structures contain substructures corresponding to each station, accessible with dot notation. The other functions like `surfacePlotter` and `weatherCodeSearch` can be used on the substructures inside of the composite.  
 
 ### Example for multiple files
 This example downloads and imports all data from March through May for the years 2017-2019 at stations KISP, KHWV, and KFRG, then plots data from 1200-1500 24 March 2018.
-1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,{'KISP','KHWV','KFRG'},2017:2019,3:5,path)`
+1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,{'KISP','KHWV','KFRG'},2017:2019,3:5,downloadToPath)`
 2. `[pComposite,fComposite] = ASOSimportManyFiveMin(downloadedFilenames,{'KISP','KHWV','KFRG'})`
 3. `startDatetime = datetime(2018,3,24,12,0,0);` `endDatetime = **datetime**(2018,3,24,15,0,0)`
 4. `[subset] = surfacePlotter(startDatetime,endDatetime,pComposite.KHWV)`
