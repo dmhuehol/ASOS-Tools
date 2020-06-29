@@ -1,10 +1,9 @@
 %%stormFinder
 %   Given an structure of ASOS data, return start time, end time, hour of
-%   peak intensity, and data for all storms in the season. Individual
-%   storms determined by 2-hour gaps.
+%   peak intensity, and data for all storms in the structure. Individual
+%   storms are determined by 2-hour gaps.
 %
-%   ASOS 5-minute data does not record snow liquid water, and snow liquid
-%   water is usually unreliable on this timescale anyway. We approximate
+%   As ASOS 5-minute data does not record snow liquid water, we approximate
 %   peak intensity from the weather codes. All weather code entries are
 %   assigned a numerical intensity score: '+' = 3, none = 2, '-' = 1
 %   For storms of sufficient length, the event is scored by hour. The hours
@@ -26,7 +25,7 @@
 %   Written by: Daniel Hueholt
 %   North Carolina State University
 %   Research Assistant at Environment Analytics
-%   Version date: 6/23/2020
+%   Version date: 6/29/2020
 %   Last major revision: 6/23/2020
 %
 
@@ -42,7 +41,7 @@ codeLength5 = codeLength == 5; %Length 5=>"BLSN " only
 blowSnow = and(contains(presentWeather,blowSnowCode),codeLength5); %Logically index on both conditions being true (hat-tip to Megan Amanatides for this trick)
 [~,blowSnowInd,~] = find(blowSnow);
 presentWeatherNoBLSN = presentWeather;
-presentWeatherNoBLSN(blowSnowInd) = {' '};
+presentWeatherNoBLSN(blowSnowInd) = {' '}; %NaN and [] could cause problems for later string finding
 
 % Locate data during precipitation
 precipCode = ["SN","BLSN","PL","DZ","FZDZ","RA","FZRA","SG","GS"]; %All weather codes corresponding to precipitation
