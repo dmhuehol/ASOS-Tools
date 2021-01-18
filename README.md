@@ -23,6 +23,7 @@
 * [**Resolving common problems**](#resolving-problems)
     * [I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!](#i-downloaded-data-then-cleared-my-workspaceclosed-matlab-and-lost-all-the-filenames)  
     * [Connection/FTP errors when running ASOSdownloadFiveMin](#error-using-connect-error-in-ftp-when-running-asosdownloadfivemin)
+    * [Why isn't precipitation amount included in the output structure?](#why-isnt-precipitation-amount-included-in-the-output-structure)
 * [**Sources and Credit**](#sources-and-credit)
  
  ## Workflow for individual files
@@ -162,6 +163,8 @@ KSLC: Salt Lake City, closest to Alta
 The cell array of filenames that's output to the workspace is saved as a .mat file to the same directory as the ASOS data. Navigate to the directory in MATLAB's file viewer and open it manually, or use the MATLAB **load** function. The filename is saved with the naming convention "downloadedFilenames_requested_yyyymmdd_HHMMSS" where the time of the filename corresponds to the time the save command ran within the function.
 ### Error using connect, error in ftp when running ASOSdownloadFiveMin
 This tends to happen when one makes a large number of requests in a very short span of time. Try waiting a few minutes and running the function again. If the problem persists, it is likely a temporary problem or maintenance on the NCEI server. Wait 24 hours and try again.
+### Why isn't precipitation amount included in the output structure?
+Unfortunately, ASOS 5-minute data only records precipitation type and intensity. It DOES NOT record precipitation amount. This is not because of the import code--there simply isn't a precipitation amount field to import! ASOS 1-minute and 1-hour data include precipitation amount, but this data is in a different format which does not interface with this codebase.
 
 ## Sources and Credit
 
