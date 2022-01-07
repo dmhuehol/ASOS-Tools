@@ -54,7 +54,7 @@ The composite structures contain substructures corresponding to each station, ac
 This example downloads and imports all data from March through May for the years 2017-2019 at stations KISP, KHWV, and KFRG, then plots data from 1200-1500 24 March 2018.
 1. `[downloadedFilenames] = ASOSdownloadFiveMin(email,{'KISP','KHWV','KFRG'},2017:2019,3:5,downloadToPath)`
 2. `[pComposite,fComposite] = ASOSimportManyFiveMin(downloadedFilenames,{'KISP','KHWV','KFRG'})`
-3. `startDatetime = datetime(2018,3,24,12,0,0);` `endDatetime = **datetime**(2018,3,24,15,0,0)`
+3. `startDatetime = datetime(2018,3,24,12,0,0);` `endDatetime = datetime(2018,3,24,15,0,0)`
 4. `[subset] = surfacePlotter(startDatetime,endDatetime,pComposite.KHWV)`
 
 ## Searching for weather codes
@@ -64,15 +64,15 @@ A month of ASOS data usually contains 8000-9000 observations. It's often useful 
 `exactTimes` stores the exact dates and times of all observations as MATLAB datetimes  
 `exactDatenums` stores the exact dates and times of all observations as MATLAB datenums  
 Note that `weatherCodeSearch` does work on the composite structures created by `ASOSimportManyFiveMin`. For example, for the composite structure `pComposite` in the example for multiple files, use the following command to find snow observations from KISP in the structure.  
-```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**('SN',pComposite.KISP)```  
+```[dates,exactTimes,exactDatenums] = weatherCodeSearch('SN',pComposite.KISP)```  
 You can also use `weatherCodeSearch` to search for multiple codes at once by inputting codes as an array of strings. For example, to search the `krdu_1218` structure for all times with either rain or snow, use the following command.  
-```[dates,exactTimes,exactDatenums] = **weatherCodeSearch**(["SN","RA"],krdu_1218)```
+```[dates,exactTimes,exactDatenums] = weatherCodeSearch(["SN","RA"],krdu_1218)```
 
 ## Extracting storms from ASOS data
 `stormFinder` is designed to extract the start time, end time, and the hour of peak intensity (for storms of sufficient duration) for all storms within a structure of ASOS data. This is particularly useful when run on multiple seasons of data. The start time is the time of the first precipitation code detected. The end time is the time of the last precipitation code before a gap greater than 2 hours.  
 ASOS 5-minute data does not include rain measurement or snow water equivalent. Thus, the peak intensity is approximated using the weather codes. The ASOS weather codes include a +/- signifier for heavy/light precipitation. We assign the different weather codes a numerical intensity score based on this signifier, and sum this score by hour while a storm is happening. The hour with the highest intensity score is designated the hour of peak precipitation intensity. This metric is untested, but should correspond qualitatively to the period of peak precipitation intensity at the surface.  
 The following example shows how to identify storms in the `krdu_1218` structure.  
-```[storms] = **stormFinder**(krdu_1218)```  
+```[storms] = stormFinder(krdu_1218)```  
 The storms structure contains two substructures. One is named `all`, which contains all storms identified. The other is named `filtered`, and restricts the storms to those with an intensity score above 15. This removes trace events. Hours of peak intensity are only calculated for the storms in the filtered substructure.
 
 ### Workflow for identifying storms corresponding to the NEUS archive
@@ -128,9 +128,9 @@ KSLC: Salt Lake City, closest to Alta
  Sadly, ASOS documentation is scattered around several places and there is no one true "master" document.  
  [**ASOS User's Guide**](https://www.weather.gov/media/asos/aum-toc.pdf) is the NWS user's guide to understanding the sensors and algorithms behind the ASOS data. However, it does not fully explain the present weather codes. NOTE THAT MUCH OF THE INFORMATION IN THIS USER'S GUIDE IS NO LONGER ACCURATE. For example, it states only one weather code is detected at a time, when the data files clearly show up to four weather codes can be reported at once. Unfortunately, this is still the most current official documentation provided, despite being last updated in 1998. There is no word on whether or when NCEI will provide more current documentation.  
  [**NWS Surface Training**](https://web.archive.org/web/20170510212516/https://www.nws.noaa.gov/om/forms/resources/SFCTraining.pdf) is a NWS training guide originally created to help NWS personnel interpret METAR/SPECI weather observations, which are in a similar format to ASOS. This document includes many of the present weather codes found in ASOS, but not all of them.  
- [**Federal Meteorological Handbook**](https://www.ofcm.gov/publications/fmh/FMH1/FMH1.pdf) defines standards for reporting surface conditions, with Table 8-5 including all of the codes used by ASOS. However, as it is designed for meteorological observers, it doesn't discuss any of the science behind the ASOS observation strategies.  
- [**TD-6401**](https://www1.ncdc.noaa.gov/pub/data/documentlibrary/tddoc/td6401.pdf) is the official dataset documentation for the ASOS 5-minute data format. However, the information for the weather codes given here is outdated; the codes described in "weather and obstructions" do not correspond to the codes in actual data.  
- These links active as of 5/27/2020.
+ [**Federal Meteorological Handbook**](https://www.icams-portal.gov/publications/fmh/FMH1/FMH1.pdf) defines standards for reporting surface conditions, with Table 8-5 including all of the codes used by ASOS. However, as it is designed for meteorological observers, it doesn't discuss any of the science behind the ASOS observation strategies.  
+ [**TD-6401**](https://www.ncei.noaa.gov/pub/data/asos-fivemin/td6401b.txt) is the official dataset documentation for the ASOS 5-minute data format. However, the information for the weather codes given here is outdated; the codes described in "weather and obstructions" do not correspond to the codes in actual data.  
+ These links active as of 1/6/2022.
  
  # Table of common weather codes
 | Weather code | Weather type | Code class |
@@ -160,7 +160,7 @@ KSLC: Salt Lake City, closest to Alta
  
 # Resolving problems
 ### I downloaded data, then cleared my workspace/closed MATLAB and lost all the filenames!
-The cell array of filenames that's output to the workspace is saved as a .mat file to the same directory as the ASOS data. Navigate to the directory in MATLAB's file viewer and open it manually, or use the MATLAB **load** function. The filename is saved with the naming convention "downloadedFilenames_requested_yyyymmdd_HHMMSS" where the time of the filename corresponds to the time the save command ran within the function.
+The cell array of filenames that's output to the workspace is saved as a .mat file to the same directory as the ASOS data. Navigate to the directory in MATLAB's file viewer and open it manually, or use the MATLAB ```load``` function. The filename is saved with the naming convention "downloadedFilenames_requested_yyyymmdd_HHMMSS" where the time of the filename corresponds to the time the save command ran within the function.
 ### Error using connect, error in ftp when running ASOSdownloadFiveMin
 This tends to happen when one makes a large number of requests in a very short span of time. Try waiting a few minutes and running the function again. If the problem persists, it is likely a temporary problem or maintenance on the NCEI server. Wait 24 hours and try again.
 ### Why isn't precipitation amount included in the output structure?
