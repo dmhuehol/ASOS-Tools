@@ -1,5 +1,5 @@
 # ASOS Tools
- Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data. Requires MATLAB 2017a+.
+ Code for processing, visualizing, and analyzing 5-minute Automated Surface Observations System (ASOS) data. Requires MATLAB 2017a+. Please note that many external links in this documentation are broken as of 1/2023.
  
  ## Table of Contents
 * [**Workflow for individual files**](#workflow-for-individual-files)  
